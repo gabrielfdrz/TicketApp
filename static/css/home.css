@@ -1,0 +1,9 @@
+@charset "UTF-8";
+body {
+    background-color: black;
+}
+
+div#form_fundo{
+    background-color: red;
+    margin: 2px;
+}
