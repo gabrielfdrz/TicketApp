@@ -2,7 +2,10 @@
 
 
 body{
-    background-color: black;
+    background-color: #626262;
+    background-size: cover;
+    background-attachment: fixed;
+    display: block;
 }
 
 div#form_fundo{
@@ -41,7 +44,7 @@ input{
 }
 
 input:focus{
-    background-color: red;
+    background-color: white;
     color: black;
 }
 
@@ -49,7 +52,7 @@ button{
     font-size: 30px;
     font-weight: bold;
     border-radius: 20px;
-    background-color: black;
+    background-color: #626262;
     color: white;
 }
 
