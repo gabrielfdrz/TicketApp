@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Home</title>
+    <link rel="stylesheet" href="../static/css/style.css">
+</head>
+<body>
+    <h1>Bem-vindo à aplicação de tickets</h1>
+    {% if 'username' in session %}
+    <a href="{{ url_for('abrir_ticket') }}">Abrir Ticket</a>
+    <a href="{{ url_for('listar_tickets') }}">Listar Tickets</a>
+    <a href="{{ url_for('logout') }}">Logout</a>
+    {% else %}
+    <a href="{{ url_for('login') }}">Login</a>
+    {% endif %}
+</body>
+</html>

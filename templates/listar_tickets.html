@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Tickets Abertos</title>
+    <link rel="stylesheet" href="../static/css/style.css">
+</head>
+<body>
+    <h1>Tickets Abertos</h1>
+    <ul>
+        {% for ticket in tickets %}
+            <li>{{ ticket.title }} - {{ ticket.description }} - Considerado: {% if ticket.considered %}Sim{% else %}Não{% endif %} - <a href="{{ url_for('considerar_ticket', ticket_id=ticket.id) }}">Considerar</a></li>
+        {% endfor %}
+    </ul>
+</body>
+</html>
