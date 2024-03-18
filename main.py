@@ -3,20 +3,28 @@ import sqlite3
 
 app = Flask(__name__)
 
-# Rota para criar o banco de dados e tabela
-@app.route('/criar_banco')
 def criar_banco():
     conn = sqlite3.connect('tickets.db')
     c = conn.cursor()
-    c.execute('''CREATE TABLE IF NOT EXISTS tickets 
-                 (id INTEGER PRIMARY KEY AUTOINCREMENT, 
-                 titulo TEXT, descricao TEXT)''')
+    c.execute('''CREATE TABLE IF NOT EXISTS usuarios (
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    nome TEXT NOT NULL,
+                    email TEXT UNIQUE NOT NULL,
+                    senha TEXT NOT NULL,
+                    tipo_de_usuario TEXT NOT NULL
+                )''')
+    c.execute('''CREATE TABLE IF NOT EXISTS tickets (
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    titulo TEXT NOT NULL,
+                    descricao TEXT NOT NULL,
+                    status TEXT NOT NULL,
+                    data_de_criacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                    usuario_id INTEGER,
+                    FOREIGN KEY (usuario_id) REFERENCES usuarios (id)
+                )''')
     conn.commit()
     conn.close()
-    return 'Banco de dados criado com sucesso!'
-
-# Lista de tickets (simulando o banco de dados)
-# Removido pois agora os dados serão armazenados no SQLite
+criar_banco()
 
 @app.route('/')
 def home():
@@ -26,8 +34,8 @@ def home():
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
-        # Aqui você lida com os dados do formulário de login
-        # Por exemplo, autentica o usuário e redireciona para outra página
+        # formulário de login
+        # autentica o usuário e redireciona para outra página
         return redirect(url_for('abrir_ticket'))
     else:
         return render_template('login.html')
