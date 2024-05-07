@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Tickets</title>
+    <link rel="stylesheet" href="../static/css/style.css" />
+    <link rel="shortcut icon" href="../static/img/LogoPreto.png" type="image/x-icon">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap">
+  </head>
+  <body>
+    <section class="home">
+      <!-- NAVBAR -->
+      <header class="navbar">
+        <div class="navbar-logo">
+          <img src="../static/img/Logo.png" alt="Logo CNH Industrial" />
+        </div>
+        <nav class="navbar-nav">
+          <ul>
+            <li><a href="/acompanhamento">Acompanhamento de Incidentes</a></li>
+            <li><a href="/">Sair</a></li>
+          </ul>
+        </nav>
+      </header>
+
+      <!-- Conteúdo -->
+      <div class="card">
+        <div class="title"><h1>Tickets</h1></div>
+
+        <!-- Filtro -->
+        <div class="filter">
+          <label for="status-filter">Filtrar por status: </label>
+          <select id="status-filter">
+            <option value="todos">Todos</option>
+            <option value="abertos">Abertos</option>
+            <option value="encerrados">Encerrados</option>
+          </select>
+        </div>
+
+        <!-- Filtro de pesquisa -->
+        <div class="filter">
+          <label for="search-filter">Pesquisar por ID:</label>
+          <input type="text" id="search-filter" placeholder="Digite o ID">
+          <button class="search-button"><img src="../static/img/lupa.png" alt="Buscar"></button>
+        </div>
+
+        <!-- Lista de tickets -->
+        <div class="ticket-list">
+
+          <!-- Ticket 1 (Aberto) -->
+          <div class="ticket ticket-open">
+            <h2>Ticket #1</h2>
+            <span class="status" id="status-open">ABERTO</span>
+            <p>Assunto: Descrição do ticket em aberto.</p>
+            <div class="ticket-actions">
+              <button class="view-button">Ver Detalhes</button>
+              <button class="cancel-button">Cancelar</button>
+              <button class="close-button">Encerrar</button>
+            </div>
+          </div>
+
+          <!-- Ticket 2 (Encerrado) -->
+          <div class="ticket ticket-closed">
+            <h2>Ticket #2</h2>
+            <span class="status" id="status-closed">ENCERRADO</span>
+            <p>Assunto: Descrição do ticket encerrado.</p>
+            <div class="ticket-actions">
+              <button class="view-button">Ver Detalhes</button>
+              <button class="extract-button">Extrair Relatório</button>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+  </body>
+</html>

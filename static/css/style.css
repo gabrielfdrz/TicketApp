@@ -1,41 +1,408 @@
-/* Resetando margens e preenchimentos padrão */
-body, html {
-    margin: 0;
-    padding: 0;
+/* Reset CSS básico */
+body,
+ul,
+li,
+h1,
+h2,
+h3,
+p,
+button,
+form,
+input,
+select,
+textarea {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  text-decoration: none;
+  font-family:"Poppins", sans-serif
+  
 }
 
-/* Estilos gerais */
 body {
-    font-family: Arial, sans-serif;
-    background-color: #f0f0f0; /* Cinza */
+  background-color: #cecece;
+  margin: 0;
 }
 
-.container {
-    max-width: 800px;
-    margin: 0 auto; /* Centralizando o conteúdo horizontalmente */
-    padding: 20px;
-    background-color: #ffffff;
-    border-radius: 10px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+
+/* NAVBAR */
+.navbar {
+  background: #1e1e1d;
+  border-bottom: 1px solid #000000;
+  padding: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
-/* Estilos específicos para cada página */
-/* Home */
-.home {
-    background-color: #f0f0f0;
+.navbar-logo img {
+  width: 140px;
 }
 
-/* Abrir Ticket */
-.abrir_ticket {
-    background-color: #ffcccc; 
+.navbar-nav {
+  list-style-type: none;
 }
 
-/* Listar Tickets */
-.listar_tickets {
-    background-color: #ffffff; 
+.navbar-nav li {
+  display: inline;
+  margin-right: 15px;
 }
 
-/* Login */
-.login {
-    background-color: #f0f0f0;
+.navbar-nav li a {
+  color: #000000;
+  text-decoration: none;
+  font-size: 18px;
+  font-weight: bold;
+  color: #ffffff;
+  font-family: "Poppins", sans-serif;
+  margin-right: 15px;
+  margin-left: 10px;
 }
+
+.navbar-nav li a:hover {
+  color: #ccc9c9;
+}
+
+/* ESTILOS PARA O CARD */
+/* ESTILOS PARA O CARD */
+/* ESTILOS PARA O CARD */
+
+.card {
+  max-width: 600px;
+  margin: 20px auto;
+  padding: 20px;
+  background-color: #fff;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.329);
+}
+
+/* FORMULÁRIO DE REGISTRO DE INCIDENTES */
+/* FORMULÁRIO DE REGISTRO DE INCIDENTES */
+/* FORMULÁRIO DE REGISTRO DE INCIDENTES */
+
+
+.title {
+  font-size: 25px;
+  text-align: center;
+  margin-top: 15px;
+  margin-bottom: 35px;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+
+
+}
+#incident-form {
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+label {
+  font-weight: bold;
+  font-size: 15px;
+}
+
+label[for="seguranca"],
+label[for="meio-ambiente"],
+label[for="energia"] {
+  font-size: 15px;
+  display: inline-block;
+  font-size: large;
+}
+
+/* ESTILOS PARA OS INPUTS TIPO "RÁDIO" TELA DE REGISTRO */
+/* ESTILOS PARA OS INPUTS TIPO "RÁDIO" TELA DE REGISTRO */
+/* ESTILOS PARA OS INPUTS TIPO "RÁDIO" TELA DE REGISTRO */
+
+
+#incident-form input[type="radio"] {
+  display: inline-block;
+  margin-left: 50px;
+  margin-right: 15px;
+  width: 18px;
+  height: 18px;
+  vertical-align: top;
+  cursor: pointer;
+}
+
+/*ESTILOS PARA OS INPUTS TIPO "TEXT" TELA DE REGISTRO */
+/*ESTILOS PARA OS INPUTS TIPO "TEXT" TELA DE REGISTRO */
+/*ESTILOS PARA OS INPUTS TIPO "TEXT" TELA DE REGISTRO */
+
+input[type="text"],
+textarea,
+select {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #000000;
+  border-radius: 5px;
+  box-sizing: border-box;
+  resize: none;
+  background-color: #00000015;
+}
+
+.form-send {
+  display: block;
+  width: 100%;
+  padding: 10px;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-top: 20px;
+  border: solid 1px #000000;
+}
+
+.form-send:hover {
+  background-color: #0056b3;
+}
+
+
+
+/* ESTILOS PARA A PÁGINA DE TICKET ABERTO/FECHADO */
+/* ESTILOS PARA A PÁGINA DE TICKET ABERTO/FECHADO */
+/* ESTILOS PARA A PÁGINA DE TICKET ABERTO/FECHADO */
+
+
+.ticket-details {
+  max-width: 800px;
+  margin: 20px auto;
+  background-color: #f9f9f9;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.actions-top {
+  text-align: left;
+  margin-bottom: 20px;
+}
+
+.back-button {
+  display: inline-block;
+  padding: 5px 10px;
+  background-color: #007bff;
+  color: #fff;
+  text-decoration: none;
+  border-radius: 5px;
+  border: solid 1px #757575;
+  font-size: 15px;
+  font-weight: bold;
+}
+
+.back-button:hover {
+  background-color: #0056b3;
+}
+
+
+.detail {
+  margin-bottom: 20px;
+}
+
+.closed-text {
+  color: red;
+  font-weight: larger;
+  float: right;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 1.2em;
+  background-color: #e0625156; 
+  padding: 5px;
+  border-radius: 5px;
+}
+
+
+.label {
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.value {
+  margin-left: 10px;
+}
+
+.actions-bottom {
+  text-align: center;
+  margin-top: 20px;
+}
+
+.close-button,
+.cancel-button,
+.extract-button,
+.view-button {
+  padding: 10px 20px;
+  border: solid 1px #757575;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 15px;
+  font-weight: bold;
+  text-decoration: none !important;
+}
+
+.close-button {
+  background-color: #5c5c5c;
+  color: #fff;
+}
+
+.close-button:hover {
+  background-color: #383838;
+}
+
+.cancel-button {
+  background-color: #dc3545;
+  color: #fff;
+}
+
+.cancel-button:hover{
+  background-color: #a01725;
+}
+
+.extract-button{
+  background-color: #dc3545;
+  color: #fff;
+}
+
+.extract-button:hover{
+  background-color: #a01725;
+}
+
+.view-button{
+  background-color: #28a745 ;
+  color: #fff;
+}
+
+.view-button:hover{
+  background-color: #218838 ;
+}
+
+hr {
+  margin: 20px 0;
+}
+
+
+/* TELA DE ACOMPANHAMENTO DOS TICKETS */
+/* TELA DE ACOMPANHAMENTO DOS TICKETS */
+/* TELA DE ACOMPANHAMENTO DOS TICKETS */
+
+/* Estilos do Filtro */
+.filter {
+  margin-bottom: 20px;
+}
+
+.filter label {
+  font-weight: bold;
+  font-size: 16px;
+}
+
+.filter select {
+  padding: 8px;
+  border: 1px solid #000000;
+  border-radius: 5px;
+  width: 300px;
+  font-size: 16px;
+}
+
+
+.filter input[type="text"] {
+  padding: 8px;
+  border: 1px solid #000000;
+  border-radius: 5px;
+  width: 300px;
+  font-size: 16px;
+}
+
+/* Estilo para o botão de busca */
+
+.search-input {
+  position: relative;
+}
+.search-button {
+  border: none;
+  background: none;
+  padding: 0;
+  cursor: pointer;
+}
+
+.search-button img {
+  width: 20px; /* Tamanho do ícone */
+  height: 20px;
+  vertical-align: middle; /* Alinhamento vertical */
+}
+
+
+/* Estilos da Lista de Tickets */
+.ticket-list {
+  list-style-type: none;
+}
+.ticket {
+  background-color: #ffffff;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+  margin: 0 auto;
+  margin-bottom: 20px;
+  max-width: 700px; 
+  border: 1px solid #afafaf;
+
+}
+
+.ticket h2 {
+  font-size: 20px;
+  margin-bottom: 10px;
+
+}
+
+.ticket p {
+  font-size: 16px;
+  margin-bottom: 10px;
+}
+
+.ticket-actions {
+  margin-top: 10px;
+}
+
+
+/* Estilo para o status no canto superior direito */
+/* Estilo para o status no canto superior direito */
+/* Estilo para o status no canto superior direito */
+
+.ticket .status {
+  position: relative; /* Alterado para posição relativa */
+  float: right; /* Alinhar à direita */
+  color: #000000;
+  padding: 5px 10px;
+}
+
+#status-open{
+  color: rgb(0, 95, 29);
+  float: right;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 15px;
+  background-color: rgba(0, 95, 29, 0.26); 
+  padding: 5px;
+  border-radius: 5px;
+  font-weight: bold;
+}
+
+#status-closed{
+  color: red;
+  float: right;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 15px;
+  background-color: #e0625156; 
+  padding: 5px;
+  border-radius: 5px;
+  font-weight: bold;
+}
+
+
+/* Ajuste de margem para o ticket com status */
+.ticket-open .ticket-actions {
+  margin-top: 30px;
+}
+
+
+
+
