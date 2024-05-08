@@ -10,9 +10,9 @@ def index():
 def login():
     return render_template('login.html')
 
-@app.route('/acompanhamentos')
+@app.route('/acompanhamento')
 def acompanhamentos():
-    return render_template('acompanhamentos.html')
+    return render_template('acompanhamento.html')
 
 @app.route('/ticket_aberto')
 def ticket_aberto():
