@@ -8,23 +8,21 @@ from flask_login import login_user, current_user, logout_user, login_required
 def index():
     return render_template('index.html')
 
-@app.route("/login", methods=['GET', 'POST'])
+@app.route('/login', methods=['POST', 'GET'])
 def login():
-    form = LoginForm()
-    if form.validate_on_submit():
-        usuario = Usuario.query.filter_by(nome_usuario=form.nome_usuario.data).first()
-        if usuario and bcrypt.check_password_hash(usuario.senha, form.senha.data):
-            login_user(usuario)
-            flash('Você está logado!', 'success')
-            return redirect(url_for('acompanhamentos'))
-        else:
-            flash('Login falhou. Verifique nome de usuário e senha.', 'danger')
-    return render_template('login.html', title='Login', form=form)
+    email = request.form.get['UsuarioEmail']
+    senha = request.form.get['UsuarioSenha']
+    if request.method == 'POST': 
+        if email == 'admim@admim.com' and senha == 'admin123':
+        return redirect(url_for('acompanhamento'))
+return render_template('login.html')
 
-@app.route("/acompanhamentos")
-@login_required
-def acompanhamentos():
-    return render_template('acompanhamentos.html', title='Acompanhamentos')
+
+@app.route('/acompanhamento', methods=['GET'])
+def acompanhamento():
+    # Se o método for GET, apenas renderize a página de acompanhamento
+    return render_template('acompanhamento.html')
+
 
 @app.route('/ticket_aberto')
 def ticket_aberto():
