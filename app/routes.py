@@ -1,17 +1,30 @@
-from flask import Flask, render_template
-from app import app
+from flask import render_template, redirect, url_for, flash, request
+from app import app, db, bcrypt
+from app.forms.login_usuario import LoginForm
+from app.models.usuarios import Usuario
+from flask_login import login_user, current_user, logout_user, login_required
 
 @app.route('/')
 def index():
     return render_template('index.html')
 
-@app.route('/login')
+@app.route("/login", methods=['GET', 'POST'])
 def login():
-    return render_template('login.html')
+    form = LoginForm()
+    if form.validate_on_submit():
+        usuario = Usuario.query.filter_by(nome_usuario=form.nome_usuario.data).first()
+        if usuario and bcrypt.check_password_hash(usuario.senha, form.senha.data):
+            login_user(usuario)
+            flash('Você está logado!', 'success')
+            return redirect(url_for('acompanhamentos'))
+        else:
+            flash('Login falhou. Verifique nome de usuário e senha.', 'danger')
+    return render_template('login.html', title='Login', form=form)
 
-@app.route('/acompanhamento')
+@app.route("/acompanhamentos")
+@login_required
 def acompanhamentos():
-    return render_template('acompanhamento.html')
+    return render_template('acompanhamentos.html', title='Acompanhamentos')
 
 @app.route('/ticket_aberto')
 def ticket_aberto():
