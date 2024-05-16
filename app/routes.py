@@ -10,19 +10,18 @@ def index():
 
 @app.route('/login', methods=['POST', 'GET'])
 def login():
-    email = request.form.get['UsuarioEmail']
-    senha = request.form.get['UsuarioSenha']
     if request.method == 'POST': 
-        if email == 'admim@admim.com' and senha == 'admin123':
-        return redirect(url_for('acompanhamento'))
-return render_template('login.html')
+        email = request.form.get('UsuarioEmail')
+        senha = request.form.get('UsuarioSenha')
+        
+        if email == 'admin@admin.com' and senha == 'admin123':
+            return redirect(url_for('acompanhamento'))  # Nome da função, não do arquivo HTML
 
+    return render_template('login.html')
 
-@app.route('/acompanhamento', methods=['GET'])
+@app.route('/acompanhamento')
 def acompanhamento():
-    # Se o método for GET, apenas renderize a página de acompanhamento
     return render_template('acompanhamento.html')
-
 
 @app.route('/ticket_aberto')
 def ticket_aberto():
