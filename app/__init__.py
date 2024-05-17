@@ -1,37 +1,37 @@
 from flask import Flask
-from flask_sqlalchemy import SQLAlchemy
 from flask_bcrypt import Bcrypt
+from flask_mysqldb import MySQL
 from flask_login import LoginManager
-
-db = SQLAlchemy()
-bcrypt = Bcrypt()
-login_manager = LoginManager()
-
+from config import Config 
 
 app = Flask(__name__)
-app.config['SECRET_KEY'] = 'sua_chave_secreta'
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root:Athon123@localhost/ticket_db'
 
-db.init_app(app)
+# Configurações do MySQL
+app.config.from_object(Config)
+
+# Inicialização do MySQL
+mysql = MySQL(app)
+
+# Inicialização do Bcrypt
+bcrypt = Bcrypt()
 bcrypt.init_app(app)
-login_manager.init_app(app)
 
+# Inicialização do LoginManager
+login_manager = LoginManager(app)
+login_manager.login_view = 'login'
+login_manager.login_message_category = 'info'
+
+from app import routes
 from app.models.usuarios import Usuario
-from app.routes import *
-
-def criar_usuario_fixo():
-    from app.models.usuarios import Usuario
-
-    if not Usuario.query.filter_by(nome_usuario='admin@admin.com').first():
-        hashed_password = bcrypt.generate_password_hash('admin123').decode('utf-8')
-        novo_usuario = Usuario(nome_usuario='admin@admin.com', senha=hashed_password)
-        db.session.add(novo_usuario)
-        db.session.commit()
+import MySQLdb
 
 @login_manager.user_loader
 def load_user(user_id):
-    return Usuario.query.get(int(user_id))
-
-
-
+    cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+    cursor.execute("SELECT * FROM usuarios WHERE id = %s", (user_id,))
+    user_data = cursor.fetchone()
+    cursor.close()
+    if user_data:
+        return Usuario(user_data['id'], user_data['email'], user_data['senha'])
+    return None
 

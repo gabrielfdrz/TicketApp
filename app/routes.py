@@ -1,8 +1,7 @@
-from flask import render_template, redirect, url_for, flash, request
-from app import app, db, bcrypt
-from app.forms.login_usuario import LoginForm
+from flask import render_template, redirect, url_for, request, flash, current_app
+from flask_login import login_user, logout_user, login_required
+from app import app
 from app.models.usuarios import Usuario
-from flask_login import login_user, current_user, logout_user, login_required
 
 @app.route('/')
 def index():
@@ -14,14 +13,26 @@ def login():
         email = request.form.get('UsuarioEmail')
         senha = request.form.get('UsuarioSenha')
         
-        if email == 'admin@admin.com' and senha == 'admin123':
-            return redirect(url_for('acompanhamento'))  # Nome da função, não do arquivo HTML
-
+        usuario = Usuario.get_by_email(email)
+        
+        if usuario and usuario.verificar_senha(senha):
+            login_user(usuario)
+            return redirect(url_for('acompanhamento'))
+        else:
+            flash('Login ou senha incorretos. Por favor, tente novamente.', 'danger')
+    
     return render_template('login.html')
 
 @app.route('/acompanhamento')
+@login_required
 def acompanhamento():
     return render_template('acompanhamento.html')
+
+@app.route('/logout')
+@login_required
+def logout():
+    logout_user()
+    return redirect(url_for('login'))
 
 @app.route('/ticket_aberto')
 def ticket_aberto():
