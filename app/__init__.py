@@ -32,6 +32,6 @@ def load_user(user_id):
     user_data = cursor.fetchone()
     cursor.close()
     if user_data:
-        return Usuario(user_data['id'], user_data['email'], user_data['senha'])
+        return Usuario(user_data['id'], user_data['nome_usuario'], user_data['senha'])
     return None
 
