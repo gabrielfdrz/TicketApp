@@ -29,3 +29,4 @@ class Usuario(UserMixin):
             return Usuario(user_data['id'], user_data['nome_usuario'], user_data['senha'])
         return None
        # return bcrypt.check_password_hash(self.senha, senha)
+
