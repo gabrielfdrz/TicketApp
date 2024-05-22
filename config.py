@@ -7,4 +7,4 @@ class Config(object):
     MYSQL_PASSWORD = 'Athon123'
     MYSQL_DB = 'ticket_db'
     DEBUG = True
-   
+    

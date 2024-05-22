@@ -4,6 +4,7 @@ from flask_mysqldb import MySQL
 from flask_login import LoginManager
 from config import Config 
 
+
 app = Flask(__name__)
 
 # Configurações do MySQL
