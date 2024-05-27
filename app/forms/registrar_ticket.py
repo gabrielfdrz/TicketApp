@@ -1,19 +1,19 @@
 # app/forms.py
 
 from flask_wtf import FlaskForm
-from wtforms import StringField, TextAreaField, IntegerField, SubmitField
+from wtforms import StringField, RadioField, SelectField, TextAreaField, SubmitField
 from wtforms.validators import DataRequired, Length, Optional
 
 class TicketForm(FlaskForm):
-    ds_tipo = StringField('Tipo', validators=[DataRequired(), Length(max=20)])
-    nm_usuario = StringField('Nome do Usuário', validators=[DataRequired(), Length(max=100)])
-    cd_matricula = IntegerField('Matrícula', validators=[DataRequired()])
-    ds_area = StringField('Área', validators=[DataRequired(), Length(max=50)])
-    ds_posto = IntegerField('Posto', validators=[Optional()])
-    ds_origem = StringField('Origem', validators=[Optional(), Length(max=10)])
-    ds_classificacao = StringField('Classificação', validators=[Optional(), Length(max=20)])
-    ds_problema = TextAreaField('Problema', validators=[DataRequired(), Length(max=2000)])
-    ds_acao = TextAreaField('Ação', validators=[Optional(), Length(max=2000)])
-    ds_solucao = TextAreaField('Solução', validators=[Optional(), Length(max=2000)])
-    nm_responsavel = StringField('Nome do Responsável', validators=[DataRequired(), Length(max=100)])
-    submit = SubmitField('Criar Ticket')
+    DS_TIPO = RadioField('Tipo', choices=[('seguranca', 'Segurança'), ('meio-ambiente', 'Meio ambiente'), ('energia', 'Energia')], validators=[DataRequired()])
+    NM_USUARIO = StringField('Nome', validators=[DataRequired()])
+    CD_MATRICULA = StringField('Matrícula', validators=[DataRequired()])
+    DS_AREA = StringField('Área do Problema', validators=[DataRequired()])
+    DS_POSTO = SelectField('Posto de trabalho', choices=[('1', '1'), ('2', '2'), ('3', '3'), ('4', '4'), ('5', '5'), ('6', '6'), ('7', '7'), ('8', '8')], validators=[DataRequired()])
+    DS_ORIGEM = SelectField('Origem', choices=[('acidente', 'Acidente'), ('qa', 'QA'), ('esmat', 'ESMAT'), ('cipa', 'CIPA'), ('outros', 'Outros')], validators=[DataRequired()])
+    DS_CLASSIFICACAO = RadioField('Classificação', choices=[('alta', 'Alta'), ('baixa', 'Baixa')], validators=[DataRequired()])
+    DS_PROBLEMA = TextAreaField('Descrição do Problema', validators=[DataRequired()])
+    DS_ACAO = TextAreaField('Ação Imediata')
+    DS_SOLUCAO = TextAreaField('Solução Proposta')
+    NM_RESPONSAVEL = StringField('Responsável', validators=[DataRequired()])
+    submit = SubmitField('Enviar')

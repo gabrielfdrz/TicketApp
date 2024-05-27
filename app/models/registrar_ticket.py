@@ -52,7 +52,7 @@ class Ticket:
                     DS_PROBLEMA = %s,
                     DS_ACAO = %s,
                     DS_SOLUCAO = %s,
-                    NM_RESPOSAVEL = %s
+                    NM_RESPONSAVEL = %s
                 WHERE CD_TICKET_ID = %s
             """, (
                 self.ds_tipo, self.nm_usuario, self.cd_matricula, self.ds_area,
@@ -64,7 +64,7 @@ class Ticket:
                 INSERT INTO TICKET (
                     DS_TIPO, NM_USUARIO, CD_MATRICULA, DS_AREA,
                     DS_POSTO, DS_ORIGEM, DS_CLASSIFICACAO, DS_PROBLEMA,
-                    DS_ACAO, DS_SOLUCAO, NM_RESPOSAVEL
+                    DS_ACAO, DS_SOLUCAO, NM_RESPONSAVEL
                 ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
             """, (
                 self.ds_tipo, self.nm_usuario, self.cd_matricula, self.ds_area,
