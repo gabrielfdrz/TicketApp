@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Tickets</title>
+    <title>Acompanhamento de Incidentes</title>
     <link rel="stylesheet" href="../static/css/style.css" />
     <link rel="shortcut icon" href="../static/img/LogoPreto.png" type="image/x-icon">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap">
@@ -34,8 +34,8 @@
           <label for="status-filter">Filtrar por status: </label>
           <select id="status-filter">
             <option value="todos">Todos</option>
-            <option value="abertos">Abertos</option>
-            <option value="encerrados">Encerrados</option>
+            <option value="ABERTO">Abertos</option>
+            <option value="ENCERRADO">Encerrados</option>
           </select>
         </div>
 
@@ -48,32 +48,57 @@
 
         <!-- Lista de tickets -->
         <div class="ticket-list">
-
-          <!-- Ticket 1 (Aberto) -->
-          <div class="ticket ticket-open">
-            <h2>Ticket #1</h2>
-            <span class="status" id="status-open">ABERTO</span>
-            <p>Assunto: Descrição do ticket em aberto.</p>
+          {% for ticket in tickets %}
+          <div class="ticket {% if ticket.status == 'ABERTO' %}ticket-open{% else %}ticket-closed{% endif %}">
+            <h2>Ticket #{{ ticket.CD_TICKET_ID }}</h2>
+            <span class="status" id="status-{{ ticket.status|lower }}">{{ ticket.status }}</span>
+            <p>Assunto: {{ ticket.DS_PROBLEMA }}</p>
             <div class="ticket-actions">
-              <a href="/ticket_aberto" class="view-button">Ver Detalhes</a>
-              <button class="cancel-button">Cancelar</button>
-              <button class="close-button">Encerrar</button>
+              <a href="/ticket/{{ ticket.CD_TICKET_ID }}" class="view-button">Ver Detalhes</a>
+              {% if ticket.status == 'ABERTO' %}
+              <form method="POST" action="/ticket/{{ ticket.CD_TICKET_ID }}/cancelar">
+                <button class="cancel-button" type="submit">Cancelar</button>
+              </form>
+              <form method="POST" action="/ticket/{{ ticket.CD_TICKET_ID }}/encerrar">
+                <button class="close-button" type="submit">Encerrar</button>
+              </form>
+              {% else %}
+              <form method="POST" action="/ticket/{{ ticket.CD_TICKET_ID }}/extrair">
+                <button class="extract-button" type="submit">Extrair Relatório</button>
+              </form>
+              {% endif %}
             </div>
           </div>
-
-          <!-- Ticket 2 (Encerrado) -->
-          <div class="ticket ticket-closed">
-            <h2>Ticket #2</h2>
-            <span class="status" id="status-closed">ENCERRADO</span>
-            <p>Assunto: Descrição do ticket encerrado.</p>
-            <div class="ticket-actions">
-              <a href="/ticket_encerrado" class="view-button">Ver Detalhes</a>
-              <button class="extract-button">Extrair Relatório</button>
-            </div>
-          </div>
-
+          {% endfor %}
         </div>
       </div>
     </section>
+    <script>
+      document.getElementById('status-filter').addEventListener('change', function() {
+        var status = this.value;
+        var tickets = document.querySelectorAll('.ticket');
+        tickets.forEach(function(ticket) {
+          if (status === 'todos') {
+            ticket.style.display = 'block';
+          } else if (ticket.querySelector('.status').id === 'status-' + status.toLowerCase()) {
+            ticket.style.display = 'block';
+          } else {
+            ticket.style.display = 'none';
+          }
+        });
+      });
+
+      document.querySelector('.search-button').addEventListener('click', function() {
+        var searchValue = document.getElementById('search-filter').value;
+        var tickets = document.querySelectorAll('.ticket');
+        tickets.forEach(function(ticket) {
+          if (ticket.querySelector('h2').innerText.includes(searchValue)) {
+            ticket.style.display = 'block';
+          } else {
+            ticket.style.display = 'none';
+          }
+        });
+      });
+    </script>
   </body>
 </html>

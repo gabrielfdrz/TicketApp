@@ -11,28 +11,29 @@ from app.forms.ticket_status import TicketStatusForm
 def index():
     form = TicketForm()
     if form.validate_on_submit():
-        tipo = form.DS_TIPO.data
-        usuario = form.NM_USUARIO.data
-        matricula = form.CD_MATRICULA.data
-        area = form.DS_AREA.data
-        posto = form.DS_POSTO.data
-        origem = form.DS_ORIGEM.data
-        classificacao = form.DS_CLASSIFICACAO.data
-        problema = form.DS_PROBLEMA.data
-        acao = form.DS_ACAO.data
-        solucao = form.DS_SOLUCAO.data
-        responsavel = form.NM_RESPONSAVEL.data
+        tipo = form.tipo.data
+        usuario = form.usuario.data
+        matricula = form.matricula.data
+        area = form.area.data
+        posto = form.posto.data
+        origem = form.origem.data
+        classificacao = form.classificacao.data
+        problema = form.problema.data
+        acao = form.acao.data
+        solucao = form.solucao.data
+        responsavel = form.responsavel.data
 
         cursor = mysql.connection.cursor()
-        cursor.execute("INSERT INTO TICKET (DS_TIPO, NM_USUARIO, CD_MATRICULA, DS_AREA, DS_POSTO, DS_ORIGEM, DS_CLASSIFICACAO, DS_PROBLEMA, DS_ACAO, DS_SOLUCAO, NM_RESPOSAVEL) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)",
-                       (tipo, usuario, matricula, area, posto, origem, classificacao, problema, acao, solucao, responsavel))
+        cursor.execute("""
+            INSERT INTO TICKET (DS_TIPO, NM_USUARIO, CD_MATRICULA, DS_AREA, DS_POSTO, DS_ORIGEM, DS_CLASSIFICACAO, DS_PROBLEMA, DS_ACAO, DS_SOLUCAO, NM_RESPONSAVEL)
+            VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+        """, (tipo, usuario, matricula, area, posto, origem, classificacao, problema, acao, solucao, responsavel))
         mysql.connection.commit()
         cursor.close()
 
         flash('Ticket criado com sucesso!', 'success')
         return redirect(url_for('index'))
     return render_template('index.html', form=form)
-
 
 @app.route('/login', methods=['POST', 'GET'])
 def login():
@@ -54,10 +55,29 @@ def login():
 @login_required
 def acompanhamento():
     cursor = mysql.connection.cursor()
-    cursor.execute("SELECT * FROM TICKET")
+    cursor.execute("""
+        SELECT t.*, ts.DS_STATUS as status
+        FROM TICKET t
+                   ,TICKET_STATUS ts
+        WHERE t.CD_TICKET_ID = ts.CD_TICKET_ID
+        ORDER BY CD_TICKET_ID DESC
+    """)
     tickets = cursor.fetchall()
     cursor.close()
     return render_template('acompanhamento.html', tickets=tickets)
+
+@app.route('/alterar_status/<int:ticket_id>/<string:status>', methods=['POST'])
+@login_required
+def alterar_status(ticket_id, status):
+    cursor = mysql.connection.cursor()
+    cursor.execute("""
+        INSERT INTO TICKET_STATUS (CD_TICKET_ID, DS_STATUS)
+        VALUES (%s, %s)
+    """, (ticket_id, status))
+    mysql.connection.commit()
+    cursor.close()
+    flash(f'Status do ticket {ticket_id} atualizado para {status}.', 'success')
+    return redirect(url_for('acompanhamento'))
 
 @app.route('/logout')
 @login_required
