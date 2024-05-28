@@ -13,9 +13,7 @@
       <!-- NAVBAR -->
       <header class="navbar">
         <div class="navbar-logo">
-          <form method="POST" action="/acompanhamento">
           <img src="../static/img/Logo.png" alt="Logo CNH Industrial" />
-        </form>
         </div>
         <nav class="navbar-nav">
           <ul>
@@ -49,21 +47,21 @@
         <!-- Lista de tickets -->
         <div class="ticket-list">
           {% for ticket in tickets %}
-          <div class="ticket {% if ticket.status == 'ABERTO' %}ticket-open{% else %}ticket-closed{% endif %}">
-            <h2>Ticket #{{ ticket.CD_TICKET_ID }}</h2>
-            <span class="status" id="status-{{ ticket.status|lower }}">{{ ticket.status }}</span>
-            <p>Assunto: {{ ticket.DS_PROBLEMA }}</p>
+          <div class="ticket {% if ticket[12] == 'ABERTO' %}ticket-open{% else %}ticket-closed{% endif %}">
+            <h2>Ticket #{{ ticket[0] }}</h2>
+            <span class="status" id="status-{{ ticket[12]|lower }}">{{ ticket[12] }}</span>
+            <p>Assunto: {{ ticket[8] }}</p>
             <div class="ticket-actions">
-              <a href="/ticket/{{ ticket.CD_TICKET_ID }}" class="view-button">Ver Detalhes</a>
-              {% if ticket.status == 'ABERTO' %}
-              <form method="POST" action="/ticket/{{ ticket.CD_TICKET_ID }}/cancelar">
+              <a href="/ticket/{{ ticket[0] }}" class="view-button">Ver Detalhes</a>
+              {% if ticket[12] == 'ABERTO' %}
+              <form method="POST" action="/ticket/{{ ticket[0] }}/cancelar">
                 <button class="cancel-button" type="submit">Cancelar</button>
               </form>
-              <form method="POST" action="/ticket/{{ ticket.CD_TICKET_ID }}/encerrar">
+              <form method="POST" action="/ticket/{{ ticket[0] }}/encerrar">
                 <button class="close-button" type="submit">Encerrar</button>
               </form>
               {% else %}
-              <form method="POST" action="/ticket/{{ ticket.CD_TICKET_ID }}/extrair">
+              <form method="POST" action="/ticket/{{ ticket[0] }}/extrair">
                 <button class="extract-button" type="submit">Extrair Relatório</button>
               </form>
               {% endif %}
