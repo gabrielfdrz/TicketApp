@@ -25,50 +25,62 @@
         <h1 class="title">Registro de Incidentes</h1>
         <form id="incident-form" method="POST" action="/">
           {{ form.hidden_tag() }}
+    
           <div class="form-group">
-            {{ form.tipo.label }}
+            <label>Tipo do Incidente:</label>
             {{ form.tipo }}
           </div>
+
           <div class="form-group">
             {{ form.usuario.label }}
             {{ form.usuario }}
           </div>
+
           <div class="form-group">
             {{ form.matricula.label }}
             {{ form.matricula }}
           </div>
+
           <div class="form-group">
             {{ form.area.label }}
             {{ form.area }}
           </div>
+
           <div class="form-group">
             {{ form.posto.label }}
             {{ form.posto }}
           </div>
+
           <div class="form-group">
             {{ form.origem.label }}
             {{ form.origem }}
           </div>
+
           <div class="form-group">
-            {{ form.classificacao.label }}
+            <label>Classificação:</label>
             {{ form.classificacao }}
           </div>
+
           <div class="form-group">
             {{ form.problema.label }}
             {{ form.problema }}
           </div>
+
           <div class="form-group">
             {{ form.acao.label }}
             {{ form.acao }}
           </div>
+
           <div class="form-group">
             {{ form.solucao.label }}
             {{ form.solucao }}
           </div>
+
           <div class="form-group">
             {{ form.responsavel.label }}
             {{ form.responsavel }}
           </div>
+
           <button class="form-send" type="submit">Registrar</button>
         </form>
       </div>
