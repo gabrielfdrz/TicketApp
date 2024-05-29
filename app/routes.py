@@ -87,9 +87,26 @@ def logout():
     logout_user()
     return redirect(url_for('login'))
 
-@app.route('/ticket_aberto')
-def ticket_aberto():
-    return render_template('ticket_aberto.html')
+@app.route('/ticket/<int:ticket_id>')
+def view_ticket(ticket_id):
+    cursor = mysql.connection.cursor()
+    cursor.execute("SELECT * FROM TICKET WHERE CD_TICKET_ID = %s", (ticket_id,))
+    ticket = cursor.fetchone()
+    cursor.close()
+    if ticket:
+        return render_template('ticket_aberto.html', ticket=ticket)
+    else:
+        flash('Ticket não encontrado.', 'danger')
+        return redirect(url_for('index'))
+    
+@app.route('/encerrar_ticket/<int:ticket_id>', methods=['POST'])
+def encerrar_ticket(ticket_id):
+    cursor = mysql.connection.cursor()
+    cursor.execute("DELETE FROM TICKET WHERE CD_TICKET_ID = %s", (ticket_id,))
+    mysql.connection.commit()
+    cursor.close()
+    flash('Ticket encerrado com sucesso!', 'success')
+    return redirect(url_for('acompanhamento'))
 
 @app.route('/ticket_encerrado')
 def ticket_encerrado():
