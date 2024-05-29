@@ -7,6 +7,7 @@ from app.models.ticket_status import TicketStatus
 from app.forms.registrar_ticket import TicketForm
 from app.forms.ticket_status import TicketStatusForm
 
+
 @app.route('/', methods=['GET', 'POST'])
 def index():
     form = TicketForm()
