@@ -94,12 +94,17 @@
             </div>
 
             <div class="actions-bottom">
+                {% if ticket[12] == 'ABERTO' %}
+                <form method="POST" action="/iniciar_ticket/{{ ticket[0] }}">
+                    <button type="submit" class="start-button">Iniciar</button>
+                </form>
+                {% endif %}
                 <form method="POST" action="/encerrar_ticket/{{ ticket[0] }}">
+                    <input type="text" name="relatorio" placeholder="Relatório de solução">
                     <button type="submit" class="close-button">Encerrar</button>
                 </form>
                 <button class="cancel-button">Cancelar</button>
             </div>
-        </div>
     </section>
 </body>
 </html>

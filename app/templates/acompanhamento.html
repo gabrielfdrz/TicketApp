@@ -1,102 +1,131 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Acompanhamento de Incidentes</title>
-    <link rel="stylesheet" href="../static/css/style.css" />
-    <link rel="shortcut icon" href="../static/img/LogoPreto.png" type="image/x-icon">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap">
-  </head>
-  <body>
-    <section class="home">
-      <!-- NAVBAR -->
-      <header class="navbar">
-        <div class="navbar-logo">
-          <img src="../static/img/Logo.png" alt="Logo CNH Industrial" />
-        </div>
-        <nav class="navbar-nav">
-          <ul>
-            <li><a href="/acompanhamento">Acompanhamento de Incidentes</a></li>
-            <li><a href="/">Sair</a></li>
-          </ul>
-        </nav>
-      </header>
-
-      <!-- Conteúdo -->
-      <div class="card">
-        <div class="title"><h1>Tickets</h1></div>
-
-        <!-- Filtro -->
-        <div class="filter">
-          <label for="status-filter">Filtrar por status: </label>
-          <select id="status-filter">
-            <option value="todos">Todos</option>
-            <option value="ABERTO">Abertos</option>
-            <option value="ENCERRADO">Encerrados</option>
-          </select>
-        </div>
-
-        <!-- Filtro de pesquisa -->
-        <div class="filter">
-          <label for="search-filter">Pesquisar por ID:</label>
-          <input type="text" id="search-filter" placeholder="Digite o ID">
-          <button class="search-button"><img src="../static/img/lupa.png" alt="Buscar"></button>
-        </div>
-
-        <!-- Lista de tickets -->
-        <div class="ticket-list">
-          {% for ticket in tickets %}
-          <div class="ticket {% if ticket[12] == 'ABERTO' %}ticket-open{% else %}ticket-closed{% endif %}">
-            <h2>Ticket #{{ ticket[0] }}</h2>
-            <span class="status" id="status-{{ ticket[12]|lower }}">{{ ticket[12] }}</span>
-            <p>Assunto: {{ ticket[8] }}</p>
-            <div class="ticket-actions">
-              <a href="/ticket/{{ ticket[0] }}" class="view-button">Ver Detalhes</a>
-              {% if ticket[12] == 'ABERTO' %}
-              <form method="POST" action="/ticket/{{ ticket[0] }}/cancelar">
-                <button class="cancel-button" type="submit">Cancelar</button>
-              </form>
-              <form method="POST" action="/ticket/{{ ticket[0] }}/encerrar">
-                <button class="close-button" type="submit">Encerrar</button>
-              </form>
-              {% else %}
-              <form method="POST" action="/ticket/{{ ticket[0] }}/extrair">
-                <button class="extract-button" type="submit">Extrair Relatório</button>
-              </form>
-              {% endif %}
-            </div>
-          </div>
-          {% endfor %}
-        </div>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Acompanhamento de Incidentes</title>
+  <link rel="stylesheet" href="../static/css/style.css">
+  <link rel="shortcut icon" href="../static/img/LogoPreto.png" type="image/x-icon">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap">
+</head>
+<body>
+  <section class="home">
+    <!-- NAVBAR -->
+    <header class="navbar">
+      <div class="navbar-logo">
+        <img src="../static/img/Logo.png" alt="Logo CNH Industrial">
       </div>
-    </section>
-    <script>
-      document.getElementById('status-filter').addEventListener('change', function() {
-        var status = this.value;
-        var tickets = document.querySelectorAll('.ticket');
-        tickets.forEach(function(ticket) {
-          if (status === 'todos') {
-            ticket.style.display = 'block';
-          } else if (ticket.querySelector('.status').id === 'status-' + status.toLowerCase()) {
-            ticket.style.display = 'block';
-          } else {
-            ticket.style.display = 'none';
-          }
-        });
-      });
+      <nav class="navbar-nav">
+        <ul>
+          <li><a href="/acompanhamento">Acompanhamento de Incidentes</a></li>
+          <li><a href="/">Sair</a></li>
+        </ul>
+      </nav>
+    </header>
 
-      document.querySelector('.search-button').addEventListener('click', function() {
-        var searchValue = document.getElementById('search-filter').value;
-        var tickets = document.querySelectorAll('.ticket');
-        tickets.forEach(function(ticket) {
-          if (ticket.querySelector('h2').innerText.includes(searchValue)) {
-            ticket.style.display = 'block';
-          } else {
-            ticket.style.display = 'none';
-          }
-        });
+    <!-- Conteúdo -->
+    <div class="card">
+      <div class="title"><h1>Tickets</h1></div>
+
+      <!-- Filtro -->
+      <div class="filter">
+        <label for="status-filter">Filtrar por status:</label>
+        <select id="status-filter">
+          <option value="todos">Todos</option>
+          <option value="ABERTO">Abertos</option>
+          <option value="ENCERRADO">Encerrados</option>
+        </select>
+      </div>
+
+      <!-- Filtro de pesquisa -->
+      <div class="filter">
+        <label for="search-filter">Pesquisar por ID:</label>
+        <input type="text" id="search-filter" placeholder="Digite o ID">
+        <button class="search-button"><img src="../static/img/lupa.png" alt="Buscar"></button>
+      </div>
+
+      <!-- Lista de tickets -->
+      <div class="ticket-list">
+        {% for ticket in tickets %}
+        <div class="ticket {% if ticket[12] == 'ABERTO' %}ticket-open{% else %}ticket-closed{% endif %}">
+          <h2>Ticket #{{ ticket[0] }}</h2>
+          <span class="status" id="status-{{ ticket[12]|lower }}">{{ ticket[12] }}</span>
+          <p>Assunto: {{ ticket[8] }}</p>
+          <div class="ticket-actions">
+            <a href="/ticket/{{ ticket[0] }}" class="view-button">Ver Detalhes</a>
+            {% if ticket[12] == 'ABERTO' %}
+            <form method="POST" action="/ticket/{{ ticket[0] }}/cancelar">
+              <button class="cancel-button" type="submit">Cancelar</button>
+            </form>
+            <form method="POST" action="/ticket/{{ ticket[0] }}/encerrar">
+              <button class="close-button" type="submit">Encerrar</button>
+            </form>
+            {% else %}
+            <button id="extract-report-button-{{ ticket[0] }}" class="extract-button" type="button">Extrair Relatório</button>
+            {% endif %}
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+  </section>
+
+  <script>
+    document.getElementById('status-filter').addEventListener('change', function() {
+      var status = this.value;
+      var tickets = document.querySelectorAll('.ticket');
+      tickets.forEach(function(ticket) {
+        if (status === 'todos') {
+          ticket.style.display = 'block';
+        } else if (ticket.querySelector('.status').id === 'status-' + status.toLowerCase()) {
+          ticket.style.display = 'block';
+        } else {
+          ticket.style.display = 'none';
+        }
       });
-    </script>
-  </body>
+    });
+
+    document.querySelector('.search-button').addEventListener('click', function() {
+      var searchValue = document.getElementById('search-filter').value;
+      var tickets = document.querySelectorAll('.ticket');
+      tickets.forEach(function(ticket) {
+        if (ticket.querySelector('h2').innerText.includes(searchValue)) {
+          ticket.style.display = 'block';
+        } else {
+          ticket.style.display = 'none';
+        }
+      });
+    });
+
+    // Adicione o evento de clique para extrair o relatório
+    var extractButtons = document.querySelectorAll('.extract-button');
+    extractButtons.forEach(function(button) {
+      button.addEventListener('click', function() {
+        var ticketId = this.id.split('-')[3]; // Obtém o ID do ticket do ID do botão
+        extractReport(ticketId);
+      });
+    });
+
+    // Função para extrair o relatório via AJAX
+    function extractReport(ticketId) {
+      var xhr = new XMLHttpRequest();
+      xhr.open('POST', '/download_tickets_excel', true); // Alteração na URL da requisição AJAX
+      xhr.responseType = 'blob'; // Tipo de resposta esperada é um blob (arquivo)
+      xhr.onload = function() {
+        if (xhr.status === 200) {
+          var blob = xhr.response;
+          var url = window.URL.createObjectURL(blob);
+          var a = document.createElement('a');
+          a.href = url;
+          a.download = 'relatorio_ticket_' + ticketId + '.xlsx'; // Nome do arquivo Excel
+          document.body.appendChild(a);
+          a.click(); // Simula um clique no link para iniciar o download
+          document.body.removeChild(a); // Remove o link depois do download
+          window.URL.revokeObjectURL(url); // Libera a memória ocupada pelo blob
+        }
+      };
+      xhr.send();
+    }
+  </script>
+</body>
 </html>

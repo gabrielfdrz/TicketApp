@@ -1,4 +1,6 @@
-from flask import render_template, redirect, url_for, request, flash, current_app
+from flask import render_template, redirect, url_for, request, flash, current_app, make_response, send_file
+from openpyxl import Workbook
+import pandas as pd
 from flask_login import login_user, logout_user, login_required
 from app import app, mysql
 from app.models.usuarios import Usuario
@@ -98,16 +100,34 @@ def view_ticket(ticket_id):
     else:
         flash('Ticket não encontrado.', 'danger')
         return redirect(url_for('index'))
-    
+
+@app.route('/iniciar_ticket/<int:ticket_id>', methods=['POST'])
+def iniciar_ticket(ticket_id):
+    # Aqui você pode adicionar o código para iniciar o ticket
+    # Por exemplo, atualizar o status do ticket para 'INICIADO'
+    cursor = mysql.connection.cursor()
+    cursor.execute("""
+        UPDATE TICKET_STATUS
+        SET DS_STATUS = 'INICIADO'
+        WHERE CD_TICKET_ID = %s
+    """, (ticket_id,))
+    mysql.connection.commit()
+    cursor.close()
+    flash('Ticket iniciado com sucesso!', 'success')
+    return redirect(url_for('view_ticket', ticket_id=ticket_id))
+
 @app.route('/encerrar_ticket/<int:ticket_id>', methods=['POST'])
 def encerrar_ticket(ticket_id):
     cursor = mysql.connection.cursor()
-    cursor.execute("DELETE FROM TICKET WHERE CD_TICKET_ID = %s", (ticket_id,))
+    relatorio = request.form.get('relatorio')
+    cursor.execute("""
+        UPDATE TICKET_STATUS 
+        SET DS_STATUS = 'ENCERRADO', 
+            DS_RELATORIO_SOLUCAO = %s,
+            DT_ENCERRAMENTO = NOW()
+        WHERE CD_TICKET_ID = %s
+    """, (relatorio, ticket_id))
     mysql.connection.commit()
     cursor.close()
     flash('Ticket encerrado com sucesso!', 'success')
     return redirect(url_for('acompanhamento'))
-
-@app.route('/ticket_encerrado')
-def ticket_encerrado():
-    return render_template('ticket_encerrado.html')

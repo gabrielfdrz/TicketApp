@@ -5,7 +5,7 @@ from wtforms.validators import DataRequired
 class TicketForm(FlaskForm):
     tipo = RadioField('Tipo', choices=[('seguranca', 'Segurança'), ('meio-ambiente', 'Meio Ambiente'), ('energia', 'Energia')], validators=[DataRequired()])
     usuario = StringField('Nome', validators=[DataRequired()])
-    matricula = IntegerField('Matrícula', validators=[DataRequired()])
+    matricula = StringField('Matrícula', validators=[DataRequired()])
     area = StringField('Área do Problema', validators=[DataRequired()])
     posto = SelectField('Posto de Trabalho', choices=[(i, str(i)) for i in range(1, 9)], validators=[DataRequired()])
     origem = SelectField('Origem', choices=[('acidente', 'Acidente'), ('qa', 'QA'), ('esmat', 'ESMAT'), ('cipa', 'CIPA'), ('outros', 'Outros')], validators=[DataRequired()])
