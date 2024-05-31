@@ -8,6 +8,7 @@ from app.models.registrar_ticket import Ticket
 from app.models.ticket_status import TicketStatus
 from app.forms.registrar_ticket import TicketForm
 from app.forms.ticket_status import TicketStatusForm
+from app.forms.relatorio import CloseTicketForm
 
 
 @app.route('/', methods=['GET', 'POST'])
@@ -96,15 +97,14 @@ def view_ticket(ticket_id):
     ticket = cursor.fetchone()
     cursor.close()
     if ticket:
-        return render_template('ticket_aberto.html', ticket=ticket)
+        close_ticket_form = CloseTicketForm()
+        return render_template('ticket_aberto.html', ticket=ticket, close_ticket_form=close_ticket_form)
     else:
         flash('Ticket não encontrado.', 'danger')
         return redirect(url_for('index'))
 
 @app.route('/iniciar_ticket/<int:ticket_id>', methods=['POST'])
 def iniciar_ticket(ticket_id):
-    # Aqui você pode adicionar o código para iniciar o ticket
-    # Por exemplo, atualizar o status do ticket para 'INICIADO'
     cursor = mysql.connection.cursor()
     cursor.execute("""
         UPDATE TICKET_STATUS
@@ -118,16 +118,29 @@ def iniciar_ticket(ticket_id):
 
 @app.route('/encerrar_ticket/<int:ticket_id>', methods=['POST'])
 def encerrar_ticket(ticket_id):
+    form = CloseTicketForm()
+    if form.validate_on_submit():
+        relatorio = form.relatorio.data
+        cursor = mysql.connection.cursor()
+        cursor.execute("""
+            UPDATE TICKET_STATUS 
+            SET DS_STATUS = 'ENCERRADO', 
+                DS_RELATORIO_SOLUCAO = %s,
+                DT_ENCERRAMENTO = NOW()
+            WHERE CD_TICKET_ID = %s
+        """, (relatorio, ticket_id))
+        mysql.connection.commit()
+        cursor.close()
+        flash('Ticket encerrado com sucesso!', 'success')
+        return redirect(url_for('view_ticket', ticket_id=ticket_id))
+    return redirect(url_for('view_ticket', ticket_id=ticket_id))
+
+@app.route('/cancelar_ticket/<int:ticket_id>', methods=['POST'])
+def cancelar_ticket(ticket_id):
     cursor = mysql.connection.cursor()
-    relatorio = request.form.get('relatorio')
-    cursor.execute("""
-        UPDATE TICKET_STATUS 
-        SET DS_STATUS = 'ENCERRADO', 
-            DS_RELATORIO_SOLUCAO = %s,
-            DT_ENCERRAMENTO = NOW()
-        WHERE CD_TICKET_ID = %s
-    """, (relatorio, ticket_id))
+    cursor.execute("DELETE FROM TICKET WHERE CD_TICKET_ID = %s", (ticket_id,))
+    cursor.execute("DELETE FROM TICKET_STATUS WHERE CD_TICKET_ID = %s", (ticket_id,))
     mysql.connection.commit()
     cursor.close()
-    flash('Ticket encerrado com sucesso!', 'success')
+    flash('Ticket cancelado com sucesso!', 'success')
     return redirect(url_for('acompanhamento'))
