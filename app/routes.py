@@ -126,7 +126,7 @@ def encerrar_ticket(ticket_id):
             UPDATE TICKET_STATUS 
             SET DS_STATUS = 'ENCERRADO', 
                 DS_RELATORIO_SOLUCAO = %s,
-                DT_ENCERRAMENTO = NOW()
+                DT_ENCERRAMENTO = SYSDATE
             WHERE CD_TICKET_ID = %s
         """, (relatorio, ticket_id))
         mysql.connection.commit()
