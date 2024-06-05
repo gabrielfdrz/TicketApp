@@ -1,4 +1,4 @@
-from flask import render_template, redirect, url_for, request, flash, current_app, make_response, send_file
+from flask import render_template, redirect, url_for, request, flash, current_app, make_response, send_file, jsonify
 from openpyxl import Workbook
 import pandas as pd
 from flask_login import login_user, logout_user, login_required
@@ -83,8 +83,7 @@ def encerrar_ticket(ticket_id):
     """, (ticket_id,))
     mysql.connection.commit()
     cursor.close()
-    flash('Ticket encerrado com sucesso!', 'success')
-    return redirect(url_for('view_ticket', ticket_id=ticket_id))
+    return jsonify({'success': True})
 
 @app.route('/cancelar_ticket/<int:ticket_id>', methods=['POST'])
 def cancelar_ticket(ticket_id):

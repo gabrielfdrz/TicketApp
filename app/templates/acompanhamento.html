@@ -47,16 +47,14 @@
       <!-- Lista de tickets -->
       <div class="ticket-list">
         {% for ticket in tickets %}
-        <div class="ticket {% if ticket[12] == 'ABERTO' %}ticket-open{% else %}ticket-closed{% endif %}">
+        <div class="ticket {% if ticket[12] == 'ABERTO' %}ticket-open{% else %}ticket-closed{% endif %}" id="ticket-{{ ticket[0] }}">
           <h2>Ticket #{{ ticket[0] }}</h2>
-          <span class="status" id="status-{{ ticket[12]|lower }}">{{ ticket[12] }}</span>
+          <span class="status" id="status-{{ ticket[0] }}">{{ ticket[12] }}</span>
           <p>Assunto: {{ ticket[8] }}</p>
           <div class="ticket-actions">
             <a href="/ticket/{{ ticket[0] }}" class="view-button">Ver Detalhes</a>
             {% if ticket[12] == 'ABERTO' %}
-            <form method="POST" action="/ticket/{{ ticket[0] }}/encerrar" style="display:inline;">
-              <button class="close-button" type="submit">Encerrar</button>
-            </form>
+            <button class="close-button" data-id="{{ ticket[0] }}">Encerrar</button>
             {% endif %}
           </div>
         </div>
@@ -72,7 +70,7 @@
       tickets.forEach(function(ticket) {
         if (status === 'todos') {
           ticket.style.display = 'block';
-        } else if (ticket.querySelector('.status').id === 'status-' + status.toLowerCase()) {
+        } else if (ticket.querySelector('.status').textContent === status) {
           ticket.style.display = 'block';
         } else {
           ticket.style.display = 'none';
@@ -89,6 +87,29 @@
         } else {
           ticket.style.display = 'none';
         }
+      });
+    });
+
+    document.querySelectorAll('.close-button').forEach(function(button) {
+      button.addEventListener('click', function() {
+        var ticketId = this.getAttribute('data-id');
+        fetch('/encerrar_ticket/' + ticketId, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        })
+        .then(response => response.json())
+        .then(data => {
+          if (data.success) {
+            var ticketElement = document.getElementById('ticket-' + ticketId);
+            var statusElement = document.getElementById('status-' + ticketId);
+            statusElement.textContent = 'ENCERRADO';
+            ticketElement.classList.remove('ticket-open');
+            ticketElement.classList.add('ticket-closed');
+            button.remove(); // Remove o botão de encerrar
+          }
+        });
       });
     });
   </script>
