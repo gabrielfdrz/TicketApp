@@ -1,6 +1,4 @@
-from flask import render_template, redirect, url_for, request, flash, current_app, make_response, send_file
-from openpyxl import Workbook
-import pandas as pd
+from flask import render_template, redirect, url_for, request, flash, current_app # type: ignore
 from flask_login import login_user, logout_user, login_required
 from app import app, mysql
 from app.models.usuarios import Usuario
@@ -8,8 +6,6 @@ from app.models.registrar_ticket import Ticket
 from app.models.ticket_status import TicketStatus
 from app.forms.registrar_ticket import TicketForm
 from app.forms.ticket_status import TicketStatusForm
-from app.forms.relatorio import CloseTicketForm
-
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
@@ -55,20 +51,19 @@ def login():
     
     return render_template('login.html')
 
-@app.route('/acompanhamento')
+@app.route('/acompanhamento', methods=['GET', 'POST'])
+@login_required
 def acompanhamento():
-    cur = mysql.connection.cursor()
-    query = """
-        SELECT TICKET.CD_TICKET_ID, TICKET.DS_TIPO, TICKET.NM_USUARIO, TICKET.CD_MATRICULA, 
-               TICKET.DS_AREA, TICKET.DS_POSTO, TICKET.DS_ORIGEM, TICKET.DS_CLASSIFICACAO, 
-               TICKET.DS_PROBLEMA, TICKET.DS_ACAO, TICKET.DS_SOLUCAO, TICKET.NM_RESPONSAVEL, 
-               TICKET_STATUS.DS_STATUS
-        FROM TICKET
-        LEFT JOIN TICKET_STATUS ON TICKET.CD_TICKET_ID = TICKET_STATUS.CD_TICKET_ID
-    """
-    cur.execute(query)
-    tickets = cur.fetchall()
-    cur.close()
+    cursor = mysql.connection.cursor()
+    cursor.execute("""
+        SELECT t.*, ts.DS_STATUS as status
+        FROM  TICKET t
+             ,TICKET_STATUS ts
+        WHERE t.CD_TICKET_ID = ts.CD_TICKET_ID
+        ORDER BY CD_TICKET_ID DESC
+    """)
+    tickets = cursor.fetchall()
+    cursor.close()
     return render_template('acompanhamento.html', tickets=tickets)
 
 @app.route('/alterar_status/<int:ticket_id>/<string:status>', methods=['POST'])
@@ -90,57 +85,10 @@ def logout():
     logout_user()
     return redirect(url_for('login'))
 
-@app.route('/ticket/<int:ticket_id>')
-def view_ticket(ticket_id):
-    cursor = mysql.connection.cursor()
-    cursor.execute("SELECT * FROM TICKET WHERE CD_TICKET_ID = %s", (ticket_id,))
-    ticket = cursor.fetchone()
-    cursor.close()
-    if ticket:
-        close_ticket_form = CloseTicketForm()
-        return render_template('ticket_aberto.html', ticket=ticket, close_ticket_form=close_ticket_form)
-    else:
-        flash('Ticket não encontrado.', 'danger')
-        return redirect(url_for('index'))
+@app.route('/ticket_aberto')
+def ticket_aberto():
+    return render_template('ticket_aberto.html')
 
-@app.route('/iniciar_ticket/<int:ticket_id>', methods=['POST'])
-def iniciar_ticket(ticket_id):
-    cursor = mysql.connection.cursor()
-    cursor.execute("""
-        UPDATE TICKET_STATUS
-        SET DS_STATUS = 'INICIADO'
-        WHERE CD_TICKET_ID = %s
-    """, (ticket_id,))
-    mysql.connection.commit()
-    cursor.close()
-    flash('Ticket iniciado com sucesso!', 'success')
-    return redirect(url_for('view_ticket', ticket_id=ticket_id))
-
-@app.route('/encerrar_ticket/<int:ticket_id>', methods=['POST'])
-def encerrar_ticket(ticket_id):
-    form = CloseTicketForm()
-    if form.validate_on_submit():
-        relatorio = form.relatorio.data
-        cursor = mysql.connection.cursor()
-        cursor.execute("""
-            UPDATE TICKET_STATUS 
-            SET DS_STATUS = 'ENCERRADO', 
-                DS_RELATORIO_SOLUCAO = %s,
-                DT_ENCERRAMENTO = SYSDATE
-            WHERE CD_TICKET_ID = %s
-        """, (relatorio, ticket_id))
-        mysql.connection.commit()
-        cursor.close()
-        flash('Ticket encerrado com sucesso!', 'success')
-        return redirect(url_for('view_ticket', ticket_id=ticket_id))
-    return redirect(url_for('view_ticket', ticket_id=ticket_id))
-
-@app.route('/cancelar_ticket/<int:ticket_id>', methods=['POST'])
-def cancelar_ticket(ticket_id):
-    cursor = mysql.connection.cursor()
-    cursor.execute("DELETE FROM TICKET WHERE CD_TICKET_ID = %s", (ticket_id,))
-    cursor.execute("DELETE FROM TICKET_STATUS WHERE CD_TICKET_ID = %s", (ticket_id,))
-    mysql.connection.commit()
-    cursor.close()
-    flash('Ticket cancelado com sucesso!', 'success')
-    return redirect(url_for('acompanhamento'))
+@app.route('/ticket_encerrado')
+def ticket_encerrado():
+    return render_template('ticket_encerrado.html')
