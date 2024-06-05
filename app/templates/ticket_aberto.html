@@ -94,23 +94,16 @@
             </div>
 
             <div class="actions-bottom">
-                {% if ticket[12] == 'ABERTO' %}
-                <form method="POST" action="/iniciar_ticket/{{ ticket[0] }}">
-                    <button type="submit" class="start-button">Iniciar</button>
-                </form>
-                {% endif %}
                 {% if ticket[12] != 'ENCERRADO' %}
                 <form method="POST" action="/encerrar_ticket/{{ ticket[0] }}">
-                    {{ close_ticket_form.hidden_tag() }}
-                    {{ close_ticket_form.relatorio.label }}<br>
-                    {{ close_ticket_form.relatorio(size=40) }}<br>
-                    {{ close_ticket_form.submit(class="close-button") }}
+                    <button type="submit" class="close-button">Encerrar</button>
                 </form>
                 {% endif %}
                 <form method="POST" action="/cancelar_ticket/{{ ticket[0] }}">
                     <button type="submit" class="cancel-button">Cancelar</button>
                 </form>
             </div>
+        </div>
     </section>
 </body>
 </html>
