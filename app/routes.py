@@ -1,5 +1,4 @@
 from flask import render_template, redirect, url_for, request, flash, current_app, make_response, send_file, jsonify
-from openpyxl import Workbook
 import pandas as pd
 from flask_login import login_user, logout_user, login_required
 from app import app, mysql
@@ -76,9 +75,8 @@ def view_ticket(ticket_id):
 def encerrar_ticket(ticket_id):
     cursor = mysql.connection.cursor()
     cursor.execute("""
-        UPDATE TICKET_STATUS 
-        SET DS_STATUS = 'ENCERRADO', 
-            DT_ENCERRAMENTO = NOW()
+        UPDATE TICKET
+        SET DS_STATUS = 'ENCERRADO'
         WHERE CD_TICKET_ID = %s
     """, (ticket_id,))
     mysql.connection.commit()

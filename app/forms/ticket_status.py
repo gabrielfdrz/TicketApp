@@ -14,6 +14,7 @@ class TicketForm(FlaskForm):
     acao_imediata = TextAreaField('Ação Imediata')
     solucao_proposta = TextAreaField('Solução Proposta')
     responsavel = StringField('Responsável', validators=[DataRequired()])
+    status = StringField('Status', validators=[DataRequired()])
 
 class TicketStatusForm(FlaskForm):
     status = RadioField('Status', choices=[('ABERTO', 'Aberto'), ('ENCERRADO', 'Encerrado')], default='ABERTO')

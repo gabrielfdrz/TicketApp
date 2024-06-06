@@ -30,6 +30,11 @@
             </div>
 
             <h1 class="title">Detalhes do Ticket</h1>
+
+            <div class="detail-1">
+                <div class="value highlight">{{ ticket[12] }}</div>
+            </div>
+
             <div class="detail">
                 <div class="label">Número de Registro do Ticket:</div>
                 <div class="value">{{ ticket[0] }}</div>
@@ -93,9 +98,11 @@
                 <div class="value">{{ ticket[11] }}</div>
             </div>
 
+          
+
             <div class="actions-bottom">
                 {% if ticket[12] != 'ENCERRADO' %}
-                <form method="POST" action="/encerrar_ticket/{{ ticket[0] }}">
+                <form id="closeTicketForm" method="POST" action="/encerrar_ticket/{{ ticket[0] }}">
                     <button type="submit" class="close-button">Encerrar</button>
                 </form>
                 {% endif %}
@@ -103,6 +110,25 @@
                     <button type="submit" class="cancel-button">Cancelar</button>
                 </form>
             </div>
+            <script>
+                document.getElementById('closeTicketForm').addEventListener('submit', function(event) {
+                    event.preventDefault(); // Previne a submissão padrão do formulário
+                    var form = this;
+                    var xhr = new XMLHttpRequest();
+                    xhr.open(form.method, form.action, true);
+                    xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+                    xhr.onload = function() {
+                        if (xhr.status >= 200 && xhr.status < 400) {
+                            // Se a resposta do servidor for bem-sucedida, redireciona para a página de acompanhamento
+                            window.location.href = '/acompanhamento'; // Substitua com o URL da sua página de acompanhamento
+                        } else {
+                            // Caso haja um erro na resposta do servidor
+                            console.error('Erro ao encerrar o ticket:', xhr.responseText);
+                        }
+                    };
+                    xhr.send(new URLSearchParams(new FormData(form)).toString());
+                });
+                </script>
         </div>
     </section>
 </body>
