@@ -41,6 +41,7 @@ def index():
     return render_template('index.html', form=form)
 
 @app.route('/login', methods=['POST', 'GET'])
+@login_required
 def login():
     if request.method == 'POST': 
         email = request.form.get('UsuarioEmail')
@@ -74,6 +75,7 @@ def view_ticket(ticket_id):
         return redirect(url_for('index'))
 
 @app.route('/encerrar_ticket/<int:ticket_id>', methods=['POST'])
+@login_required
 def encerrar_ticket(ticket_id):
     cursor = mysql.connection.cursor()
     cursor.execute("""
@@ -86,6 +88,7 @@ def encerrar_ticket(ticket_id):
     return jsonify({'success': True})
 
 @app.route('/cancelar_ticket/<int:ticket_id>', methods=['POST'])
+@login_required
 def cancelar_ticket(ticket_id):
     cursor = mysql.connection.cursor()
     cursor.execute("DELETE FROM TICKET WHERE CD_TICKET_ID = %s", (ticket_id,))
@@ -96,6 +99,7 @@ def cancelar_ticket(ticket_id):
     return redirect(url_for('acompanhamento'))
 
 @app.route('/acompanhamento')
+@login_required
 def acompanhamento():
     cursor = mysql.connection.cursor()
     cursor.execute("SELECT * FROM TICKET")
@@ -104,6 +108,7 @@ def acompanhamento():
     return render_template('acompanhamento.html', tickets=tickets)
 
 @app.route('/extrair_relatorio')
+@login_required
 def extrair_relatorio():
     cursor = mysql.connection.cursor()
     cursor.execute("SELECT * FROM TICKET")

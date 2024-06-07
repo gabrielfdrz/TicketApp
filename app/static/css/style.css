@@ -57,10 +57,13 @@ body {
   font-family: "Poppins", sans-serif;
   margin-right: 15px;
   margin-left: 10px;
+  display: inline-block; /* Adicionando essa propriedade para garantir que o elemento tenha uma dimensão */
+  transition: transform 0.3s; /* Adicionando transição de 0.3 segundos para suavizar a mudança */
 }
 
 .navbar-nav li a:hover {
   color: #ccc9c9;
+  transform: scale(1.05); /* Zoom de 50% ao passar o mouse */
 }
 
 /* ESTILOS PARA O CARD */
@@ -74,6 +77,11 @@ body {
   background-color: #fff;
   border-radius: 10px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.329);
+  transition: transform 0.3s; /* Adicionando transição de 0.3 segundos para suavizar a mudança */
+}
+
+.card:hover{
+  transform: scale(1.01); /* Zoom de 50% ao passar o mouse */
 }
 
 /* FORMULÁRIO DE REGISTRO DE INCIDENTES */
@@ -145,6 +153,7 @@ select {
   background-color: #00000015;
 }
 
+
 .form-send {
   display: block;
   width: 100%;
@@ -190,7 +199,6 @@ select {
   color: #fff;
   text-decoration: none;
   border-radius: 5px;
-  border: solid 1px #757575;
   font-size: 15px;
   font-weight: bold;
 }
@@ -248,21 +256,21 @@ select {
 }
 
 .close-button {
-  background-color: rgb(219, 56, 56);
-  color: #fff;
-}
-
-.close-button:hover {
-  background-color: #383838;
-}
-
-.cancel-button {
   background-color: #dc3545;
   color: #fff;
 }
 
-.cancel-button:hover{
+.close-button:hover {
   background-color: #a01725;
+}
+
+.cancel-button {
+  background-color: #414141;
+  color: #fff;
+}
+
+.cancel-button:hover{
+  background-color: #363636;
 }
 
 .extract-button{
@@ -446,6 +454,7 @@ li {
   font-size: 15px;
   font-weight: bold;
   text-align: center;
+  color: #fff;
 }
 
 a:-webkit-any-link {
