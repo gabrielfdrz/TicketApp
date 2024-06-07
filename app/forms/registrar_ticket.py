@@ -8,7 +8,7 @@ class TicketForm(FlaskForm):
     usuario = StringField('Nome', validators=[DataRequired()])
     matricula = StringField('Matrícula', validators=[DataRequired()])
     area = StringField('Área do Problema', validators=[DataRequired()])
-    posto = SelectField('Posto de Trabalho', choices=[(i, str(i)) for i in range(1, 9)], validators=[DataRequired()])
+    posto = SelectField('Posto de Trabalho', choices=[('analista de qualidade', 'Analista de Qualidade'), ('engenheiro de projetos mecanicos', 'Engenheiro de Projetos Mecânicos'), ('gerente de producao', 'Gerente de Produção'), ('operador de maquina', 'Operador de Máquina'), ('rescursos humanos', 'Recursos Humanos'), ('supervisor de linha de producao', 'Supervisor de Linha de Produção'), ('tecnico de manutencao', 'Técnico de Manutenção')], validators=[DataRequired()])
     origem = SelectField('Origem', choices=[('acidente', 'Acidente'), ('qa', 'QA'), ('esmat', 'ESMAT'), ('cipa', 'CIPA'), ('outros', 'Outros')], validators=[DataRequired()])
     classificacao = RadioField('Classificação', choices=[('alta', 'Alta'), ('baixa', 'Baixa')], validators=[DataRequired()])
     problema = TextAreaField('Descrição do Problema', validators=[DataRequired()])

@@ -481,3 +481,16 @@ color: #fff;
  
  }
 
+ .ticket-aberto{
+ background-color: green;
+ border-radius: 5px;
+
+
+ }
+
+ .ticket-encerrado {
+background-color: red;
+border-radius: 5px;
+
+ }
+
