@@ -29,11 +29,9 @@
                 <a href="/acompanhamento" class="back-button">Voltar</a>
             </div>
 
-            <h1 class="title">Detalhes do Ticket</h1>
+            <h1 class="title">Detalhes do CH2406-{{ticket[0] }}</h1>
 
-            <div class="detail-1">
-                <div class="value highlight">{{ ticket[12] }}</div>
-            </div>
+            <div id="ticketStatus" class="ticket-details-1">{{ ticket[12] }}</div>
 
             <div class="detail">
                 <div class="label">Número de Registro do Ticket:</div>
@@ -98,8 +96,6 @@
                 <div class="value">{{ ticket[11] }}</div>
             </div>
 
-          
-
             <div class="actions-bottom">
                 {% if ticket[12] != 'ENCERRADO' %}
                 <form id="closeTicketForm" method="POST" action="/encerrar_ticket/{{ ticket[0] }}">
@@ -110,6 +106,7 @@
                     <button type="submit" class="cancel-button">Cancelar</button>
                 </form>
             </div>
+            
             <script>
                 document.getElementById('closeTicketForm').addEventListener('submit', function(event) {
                     event.preventDefault(); // Previne a submissão padrão do formulário
@@ -128,7 +125,20 @@
                     };
                     xhr.send(new URLSearchParams(new FormData(form)).toString());
                 });
-                </script>
+            </script>
+
+            <script>
+                document.addEventListener('DOMContentLoaded', function() {
+                    var ticketStatusElement = document.getElementById('ticketStatus');
+                    var status = ticketStatusElement.textContent.trim().toUpperCase();
+                
+                    if (status === 'ABERTO') {
+                        ticketStatusElement.classList.add('ticket-aberto');
+                    } else if (status === 'ENCERRADO') {
+                        ticketStatusElement.classList.add('ticket-encerrado');
+                    }
+                });
+            </script>
         </div>
     </section>
 </body>

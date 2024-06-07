@@ -37,7 +37,6 @@ h2 {
   position: relative;
   margin: 30px 0;
   width: 310px;
-  border-bottom: 0.5px solid #fff;
 }
 .inputbox label {
   position: absolute;
@@ -60,8 +59,9 @@ input:valid ~ label {
   border: none;
   outline: none;
   font-size: 1em;
-  padding: 0 15px 0 3px;
-  color: #fff;
+ 
+  padding-left: 5px;
+  color: #eee;
 }
 .inputbox ion-icon {
   position: absolute;
@@ -135,6 +135,7 @@ button {
 
   .inputbox input {
     font-size: 0.9em;
+
   }
 
   .forget {

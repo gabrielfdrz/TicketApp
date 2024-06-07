@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tabela de Informações</title>
+    <link rel="shortcut icon" href="static/img/LogoPreto.png" type="image/x-icon">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap">
+    <link rel="stylesheet" href="static/css/relatorio.css" />
+</head>
+<body>
+    <section class="home">
+        <!-- NAVBAR -->
+        <header class="navbar">
+          <div class="navbar-logo">
+            <a href="Index.html"> <img src="static/img/Logo.png" alt="Logo CNH Industrial" /> </a>
+          </div>
+          <nav class="navbar-nav">
+            <ul>
+              <li><a href="/acompanhamento">Acompanhamento de Incidentes</a></li>
+              <li><a href="/">Sair</a></li>
+            </ul>
+          </nav>
+        </header>
+
+        <div class="card-extrair">
+            <h1 class="title">Relatórios</h1>
+
+            <div class="container-filter">
+              <div class="filter">
+                  <label for="filter-start-date">Data de Início:</label>
+                  <input type="date" id="filter-start-date" name="filter-start-date">
+                  <label for="filter-end-date" style="margin-left: 10px;">Data de Fim:</label>
+                  <input type="date" id="filter-end-date" name="filter-end-date">
+                  <button id="filter-button">Filtrar</button>
+              </div>
+              <button id="download-button">Download</button>
+          </div>
+
+            <!-- Tabela para exibir os dados -->
+            <table>
+                <thead>
+                    <tr> 
+                        <th>Chamado</th>
+                        <th>Tipo</th>
+                        <th>Usuário</th>
+                        <th>Matrícula</th>
+                        <th>Área</th>
+                        <th>Posto</th>
+                        <th>Origem</th>
+                        <th>Classificação</th>
+                        <th>Problema</th>
+                        <th>Responsável</th>
+                        <th>Status</th>
+                        <th>Data de Emissão</th>
+                    </tr>
+                </thead>
+                <tbody id="tickets-table">
+                    <!-- Iterar sobre os dados passados e exibi-los na tabela -->
+                    {% for ticket in tickets %}
+                        <tr>
+                            <td>{{ ticket[0] }}</td>
+                            <td>{{ ticket[1] }}</td>
+                            <td>{{ ticket[2] }}</td>
+                            <td>{{ ticket[3] }}</td>
+                            <td>{{ ticket[4] }}</td>
+                            <td>{{ ticket[5] }}</td>
+                            <td>{{ ticket[6] }}</td>
+                            <td>{{ ticket[7] }}</td>
+                            <td>{{ ticket[10] }}</td>
+                            <td>{{ ticket[11] }}</td>
+                            <td>{{ ticket[12] }}</td>
+                            <td data-date="{{ ticket[13] }}">{{ ticket[13] }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <script>
+        // Função para formatar as datas em yyyy/mm/dd
+        function formatDate(date) {
+            let d = new Date(date);
+            let month = '' + (d.getMonth() + 1);
+            let day = '' + d.getDate();
+            let year = d.getFullYear();
+
+            if (month.length < 2) month = '0' + month;
+            if (day.length < 2) day = '0' + day;
+
+            return [year, month, day].join('/');
+        }
+
+        document.getElementById('filter-button').addEventListener('click', function() {
+            const startDate = document.getElementById('filter-start-date').value;
+            const endDate = document.getElementById('filter-end-date').value;
+            const rows = document.querySelectorAll('#tickets-table tr');
+
+            rows.forEach(row => {
+                const dateCell = row.querySelector('[data-date]');
+                if (dateCell) {
+                    const date = dateCell.getAttribute('data-date');
+                    const rowDate = new Date(date).toISOString().split('T')[0]; // Convert to yyyy-mm-dd
+                    const formattedRowDate = formatDate(rowDate);
+                    const start = startDate ? formatDate(startDate) : null;
+                    const end = endDate ? formatDate(endDate) : null;
+
+                    if ((start && formattedRowDate < start) || (end && formattedRowDate > end)) {
+                        row.style.display = 'none';
+                    } else {
+                        row.style.display = '';
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+</html>

@@ -8,6 +8,7 @@ from app.models.ticket_status import TicketStatus
 from app.forms.registrar_ticket import TicketForm
 from app.forms.ticket_status import TicketStatusForm
 from app.forms.relatorio import Status
+from datetime import datetime
 
 
 @app.route('/', methods=['GET', 'POST'])
@@ -25,12 +26,13 @@ def index():
         acao = form.acao.data
         solucao = form.solucao.data
         responsavel = form.responsavel.data
+        data_emissao = datetime.now().strftime('%Y-%m-%d %H:%M:%S')  # Captura a data e hora atuais
 
         cursor = mysql.connection.cursor()
         cursor.execute("""
-            INSERT INTO TICKET (DS_TIPO, NM_USUARIO, CD_MATRICULA, DS_AREA, DS_POSTO, DS_ORIGEM, DS_CLASSIFICACAO, DS_PROBLEMA, DS_ACAO, DS_SOLUCAO, NM_RESPONSAVEL)
-            VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
-        """, (tipo, usuario, matricula, area, posto, origem, classificacao, problema, acao, solucao, responsavel))
+            INSERT INTO TICKET (DS_TIPO, NM_USUARIO, CD_MATRICULA, DS_AREA, DS_POSTO, DS_ORIGEM, DS_CLASSIFICACAO, DS_PROBLEMA, DS_ACAO, DS_SOLUCAO, NM_RESPONSAVEL, DT_EMISSAO)
+            VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+        """, (tipo, usuario, matricula, area, posto, origem, classificacao, problema, acao, solucao, responsavel, data_emissao))
         mysql.connection.commit()
         cursor.close()
 
@@ -87,7 +89,7 @@ def encerrar_ticket(ticket_id):
 def cancelar_ticket(ticket_id):
     cursor = mysql.connection.cursor()
     cursor.execute("DELETE FROM TICKET WHERE CD_TICKET_ID = %s", (ticket_id,))
-    cursor.execute("DELETE FROM TICKET_STATUS WHERE CD_TICKET_ID = %s", (ticket_id,))
+    #cursor.execute("DELETE FROM TICKET_STATUS WHERE CD_TICKET_ID = %s", (ticket_id,))#
     mysql.connection.commit()
     cursor.close()
     flash('Ticket cancelado com sucesso!', 'success')
@@ -100,3 +102,12 @@ def acompanhamento():
     tickets = cursor.fetchall()
     cursor.close()
     return render_template('acompanhamento.html', tickets=tickets)
+
+@app.route('/extrair_relatorio')
+def extrair_relatorio():
+    cursor = mysql.connection.cursor()
+    cursor.execute("SELECT * FROM TICKET")
+    tickets = cursor.fetchall()
+    cursor.close()
+    return render_template('extrair_relatorio.html', tickets=tickets)
+

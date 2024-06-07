@@ -1,0 +1,197 @@
+/* Reset CSS básico */
+body,
+ul,
+li,
+h1,
+h2,
+h3,
+p,
+button,
+form,
+input,
+select,
+textarea {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  text-decoration: none;
+  font-family:"Poppins", sans-serif
+  
+}
+
+body {
+    background: linear-gradient(to top , #cecece, #ffffff);
+    margin: 0;
+  }
+  
+
+.home{
+  min-height: 100vh;
+  width: 100%;
+  flex-wrap: nowrap;
+  background-position: center;
+}
+
+/* NAVBAR */
+.navbar {
+  background: #1e1e1d;
+  border-bottom: 1px solid #1e1e11;
+  padding: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.navbar-logo img {
+  width: 140px;
+}
+
+.navbar-nav {
+  list-style-type: none;
+}
+
+.navbar-nav li {
+  display: inline;
+  margin-right: 15px;
+}
+
+.navbar-nav li a {
+  color: #000000;
+  text-decoration: none;
+  font-size: 18px;
+  font-weight: bold;
+  color: #ffffff;
+  font-family: "Poppins", sans-serif;
+  margin-right: 15px;
+  margin-left: 10px;
+  display: inline-block; /* Adicionando essa propriedade para garantir que o elemento tenha uma dimensão */
+  transition: transform 0.3s; /* Adicionando transição de 0.3 segundos para suavizar a mudança */
+}
+
+.navbar-nav li a:hover {
+    color: #cecece;
+    transform: scale(1.05); /* Zoom de 50% ao passar o mouse */
+
+  }
+  /* Card CSS */
+  .card-extrair {
+    background-color: #ffffff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 20px;
+    margin: 20px auto;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    width: 90%;
+    overflow-x: auto; /* Adicionando scroll horizontal quando necessário */
+}
+
+  .title {
+    font-size: 25px;
+    text-align: center;
+    margin-top: 15px;
+    margin-bottom: 35px;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+  }
+  
+  
+  /* Table CSS */
+  
+  .filter input[type="date"] {
+    padding: 8px 12px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-family: 'Poppins', sans-serif;
+    font-size: 15px;
+  }
+  
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 0;
+    font-family: 'Poppins', sans-serif;
+    font-size: 14px;
+    text-align: left;
+  }
+  
+  th, td {
+    padding: 10px;
+    border: 1px solid #ddd;
+    max-width: 150px; /* Defina o valor adequado para a largura máxima das células */
+    word-wrap: break-word; /* Permite que as palavras longas sejam quebradas para a próxima linha */
+}
+  
+  thead th {
+    background-color: #333;
+    color: #ffffff;
+    font-weight: bold;
+  }
+  
+  tbody tr:nth-child(even) {
+    background-color: #f9f9f9;
+  }
+  
+  tbody tr:hover {
+    background-color: #f1f1f1;
+  }
+  
+  #filter-button {
+    margin-left: 10px;
+    padding: 9px 20px;
+    background-color: #0063f8;
+    color: #ffffff;
+    border: none;
+    border-radius: 4px;
+    font-family: 'Poppins', sans-serif;
+    font-size: 15px;
+    cursor: pointer;
+  }
+  
+  #filter-button:hover {
+    background-color: #004bbd;
+  }
+  
+  #download-button{
+    padding-right: 0px;
+  }
+  
+.container-filter {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.filter {
+    display: flex;
+    align-items: center;
+}
+
+.filter label {
+    margin-right: 10px;
+}
+
+.filter input {
+    margin-right: 10px;
+}
+
+#filter-button {
+    margin-right: 20px;
+}
+
+#download-button {
+    margin-left: 10px;
+    padding: 9px 20px;
+    align-self: flex-end;
+    background-color: #0063f8;
+    color: #ffffff;
+    border: none;
+    border-radius: 4px;
+    font-family: 'Poppins', sans-serif;
+    font-size: 15px;
+    cursor: pointer;
+}
+
+#download-button:hover {
+    background-color: #004bbd;
+}
+
