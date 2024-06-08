@@ -8,8 +8,6 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap">
     <link rel="stylesheet" href="static/css/relatorio.css" />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
-
-
 </head>
 <body>
     <section class="home">
@@ -71,10 +69,10 @@
                             <td>{{ ticket[5] }}</td>
                             <td>{{ ticket[6] }}</td>
                             <td>{{ ticket[7] }}</td>
+                            <td>{{ ticket[8] }}</td>
+                            <td>{{ ticket[9] }}</td>
                             <td>{{ ticket[10] }}</td>
-                            <td>{{ ticket[11] }}</td>
-                            <td>{{ ticket[12] }}</td>
-                            <td data-date="{{ ticket[13] }}">{{ ticket[13] }}</td>
+                            <td data-date="{{ ticket[11] }}">{{ ticket[11] }}</td>
                         </tr>
                     {% endfor %}
                 </tbody>
@@ -118,8 +116,10 @@
                 }
             });
         });
-    </script>
 
-    
+        document.getElementById('download-button').addEventListener('click', function() {
+            window.location.href = '/extrair_relatorio_csv';
+        });
+    </script>
 </body>
 </html>

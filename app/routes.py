@@ -1,6 +1,6 @@
 from flask import render_template, redirect, url_for, request, flash, current_app, make_response, send_file, jsonify
 import pandas as pd
-from flask_login import login_user, logout_user, login_required
+from flask_login import login_user, logout_user, login_required, current_user
 from app import app, mysql
 from app.models.usuarios import Usuario
 from app.models.registrar_ticket import Ticket
@@ -41,8 +41,10 @@ def index():
     return render_template('index.html', form=form)
 
 @app.route('/login', methods=['POST', 'GET'])
-@login_required
 def login():
+    if current_user.is_authenticated:
+        return redirect(url_for('acompanhamento'))
+
     if request.method == 'POST': 
         email = request.form.get('UsuarioEmail')
         senha = request.form.get('UsuarioSenha')
@@ -51,9 +53,11 @@ def login():
         
         if usuario and usuario.verificar_senha(senha):
             login_user(usuario)
-            return redirect(url_for('acompanhamento'))
+            next_page = request.args.get('next')
+            return redirect(next_page) if next_page else redirect(url_for('acompanhamento'))
         else:
             flash('Login ou senha incorretos. Por favor, tente novamente.', 'danger')
+    
     return render_template('login.html')
 
 @app.route('/logout')
@@ -116,3 +120,45 @@ def extrair_relatorio():
     cursor.close()
     return render_template('extrair_relatorio.html', tickets=tickets)
 
+@app.route('/extrair_relatorio_csv')
+@login_required
+def extrair_relatorio_csv():
+    import csv
+    import io
+    from flask import Response
+    
+    # Cria um cursor para executar a consulta
+    cursor = mysql.connection.cursor()
+    cursor.execute("SELECT * FROM TICKET")
+    tickets = cursor.fetchall()
+    cursor.close()
+    
+     # Cria um objeto StringIO para armazenar os dados do CSV na memória
+    output = io.StringIO()
+    writer = csv.writer(output, delimiter=';')
+    
+    # Escreve o cabeçalho do CSV conforme as colunas da sua tabela HTML
+    writer.writerow(['Chamado', 'Tipo', 'Usuário', 'Matrícula', 'Área', 'Posto', 'Origem', 'Classificação', 'Problema', 'Responsável', 'Status', 'Data de Emissão'])
+    
+    # Escreve os dados das linhas no CSV
+    for ticket in tickets:
+        row = [
+            ticket[0],  # Chamado
+            ticket[1],  # Tipo
+            ticket[2],  # Usuário
+            ticket[3],  # Matrícula
+            ticket[4],  # Área
+            ticket[5],  # Posto
+            ticket[6],  # Origem
+            ticket[7],  # Classificação
+            ticket[8],  # Problema
+            ticket[9],  # Responsável
+            ticket[10], # Status
+            ticket[11]  # Data de Emissão
+        ]
+        writer.writerow(row)
+    # Garante que todos os dados foram escritos no buffer
+    output.seek(0)
+    
+    # Cria uma resposta HTTP com o conteúdo do CSV
+    return Response(output, mimetype="text/csv", headers={"Content-Disposition": "attachment;filename=tickets.csv"})
