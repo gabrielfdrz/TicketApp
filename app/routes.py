@@ -42,9 +42,6 @@ def index():
 
 @app.route('/login', methods=['POST', 'GET'])
 def login():
-    if current_user.is_authenticated:
-        return redirect(url_for('acompanhamento'))
-
     if request.method == 'POST': 
         email = request.form.get('UsuarioEmail')
         senha = request.form.get('UsuarioSenha')
@@ -151,10 +148,10 @@ def extrair_relatorio_csv():
             ticket[5],  # Posto
             ticket[6],  # Origem
             ticket[7],  # Classificação
-            ticket[8],  # Problema
-            ticket[9],  # Responsável
-            ticket[10], # Status
-            ticket[11]  # Data de Emissão
+            ticket[10],  # Problema
+            ticket[11],  # Responsável
+            ticket[12], # Status
+            ticket[13]  # Data de Emissão
         ]
         writer.writerow(row)
     # Garante que todos os dados foram escritos no buffer
