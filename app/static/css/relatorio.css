@@ -195,3 +195,12 @@ body {
     background-color: #004bbd;
 }
 
+#status-filter {
+  padding: 8px 12px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-family: 'Poppins', sans-serif;
+  font-size: 15px;
+  margin-bottom:  15px;
+
+}

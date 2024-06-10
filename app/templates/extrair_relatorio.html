@@ -38,7 +38,16 @@
               
               <button id="download-button">Download</button>
           </div>
-
+          <div class="filter">
+            <label for="status-filter">Filtrar por status:</label>
+            <select id="status-filter">
+              <option value="todos">Todos</option>
+              <option value="ABERTO">Aberto</option>
+              <option value="EM ANALISE">Em Análise</option>
+              <option value="ENCERRADO">Encerrado</option>
+            </select>
+          </div>
+    
             <!-- Tabela para exibir os dados -->
             <table>
                 <thead>
@@ -69,10 +78,10 @@
                             <td>{{ ticket[5] }}</td>
                             <td>{{ ticket[6] }}</td>
                             <td>{{ ticket[7] }}</td>
+                            <td>{{ ticket[8] }}</td>
+                            <td>{{ ticket[9] }}</td>
                             <td>{{ ticket[10] }}</td>
-                            <td>{{ ticket[11] }}</td>
-                            <td>{{ ticket[12] }}</td>
-                            <td data-date="{{ ticket[13] }}">{{ ticket[13] }}</td>
+                            <td data-date="{{ ticket[11] }}">{{ ticket[11] }}</td>
                         </tr>
                     {% endfor %}
                 </tbody>
@@ -81,17 +90,10 @@
     </section>
 
     <script>
-        // Função para formatar as datas em yyyy/mm/dd
-        function formatDate(date) {
-            let d = new Date(date);
-            let month = '' + (d.getMonth() + 1);
-            let day = '' + d.getDate();
-            let year = d.getFullYear();
-
-            if (month.length < 2) month = '0' + month;
-            if (day.length < 2) day = '0' + day;
-
-            return [year, month, day].join('/');
+        // Função para converter datas no formato dd/mm/yyyy para yyyy/mm/dd
+        function formatDate(dateStr) {
+            const [day, month, year] = dateStr.split('/');
+            return `${year}-${month}-${day}`;
         }
 
         document.getElementById('filter-button').addEventListener('click', function() {
@@ -102,11 +104,12 @@
             rows.forEach(row => {
                 const dateCell = row.querySelector('[data-date]');
                 if (dateCell) {
-                    const date = dateCell.getAttribute('data-date');
-                    const rowDate = new Date(date).toISOString().split('T')[0]; // Convert to yyyy-mm-dd
-                    const formattedRowDate = formatDate(rowDate);
-                    const start = startDate ? formatDate(startDate) : null;
-                    const end = endDate ? formatDate(endDate) : null;
+                    const date = dateCell.getAttribute('data-date'); // dd/mm/yyyy
+                    const rowDate = formatDate(date); // yyyy-mm-dd
+
+                    const start = startDate ? new Date(startDate) : null;
+                    const end = endDate ? new Date(endDate) : null;
+                    const formattedRowDate = new Date(rowDate);
 
                     if ((start && formattedRowDate < start) || (end && formattedRowDate > end)) {
                         row.style.display = 'none';
@@ -119,6 +122,28 @@
 
         document.getElementById('download-button').addEventListener('click', function() {
             window.location.href = '/extrair_relatorio_csv';
+        });
+
+        document.getElementById('status-filter').addEventListener('change', function() {
+            const selectedStatus = this.value;
+            const rows = document.querySelectorAll('#tickets-table tr');
+    
+            rows.forEach(row => {
+                const statusCell = row.querySelector('td:nth-child(11)'); // Seleciona a célula de status
+                if (statusCell) {
+                    const status = statusCell.textContent.trim(); // Obtém o status da célula
+    
+                    if (selectedStatus === 'todos') {
+                        row.style.display = ''; // Mostra todas as linhas se "Todos" for selecionado
+                    } else {
+                        if (selectedStatus === status) {
+                            row.style.display = ''; // Mostra a linha se o status selecionado corresponder ao status da linha
+                        } else {
+                            row.style.display = 'none'; // Oculta a linha se o status selecionado não corresponder ao status da linha
+                        }
+                    }
+                }
+            });
         });
     </script>
 </body>

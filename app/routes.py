@@ -1,4 +1,4 @@
-from flask import render_template, redirect, url_for, request, flash, current_app, make_response, send_file, jsonify
+from flask import render_template, redirect, url_for, request, flash, current_app, make_response, send_file, jsonify, Response
 import pandas as pd
 from flask_login import login_user, logout_user, login_required, current_user
 from app import app, mysql
@@ -9,7 +9,8 @@ from app.forms.registrar_ticket import TicketForm
 from app.forms.ticket_status import TicketStatusForm
 from app.forms.relatorio import Status
 from datetime import datetime
-
+import csv
+import io
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
@@ -93,7 +94,6 @@ def encerrar_ticket(ticket_id):
 def cancelar_ticket(ticket_id):
     cursor = mysql.connection.cursor()
     cursor.execute("DELETE FROM TICKET WHERE CD_TICKET_ID = %s", (ticket_id,))
-    #cursor.execute("DELETE FROM TICKET_STATUS WHERE CD_TICKET_ID = %s", (ticket_id,))#
     mysql.connection.commit()
     cursor.close()
     flash('Ticket cancelado com sucesso!', 'success')
@@ -112,7 +112,22 @@ def acompanhamento():
 @login_required
 def extrair_relatorio():
     cursor = mysql.connection.cursor()
-    cursor.execute("SELECT * FROM TICKET")
+    cursor.execute("""
+        SELECT 
+            T.CD_TICKET_ID, 
+            T.DS_TIPO, 
+            T.NM_USUARIO, 
+            T.CD_MATRICULA, 
+            T.DS_AREA, 
+            T.DS_POSTO, 
+            T.DS_ORIGEM, 
+            T.DS_CLASSIFICACAO, 
+            T.DS_PROBLEMA, 
+            T.NM_RESPONSAVEL, 
+            T.DS_STATUS, 
+            DATE_FORMAT(T.DT_EMISSAO, '%d/%m/%Y') AS DT_EMISSAO
+        FROM TICKET T
+    """)
     tickets = cursor.fetchall()
     cursor.close()
     return render_template('extrair_relatorio.html', tickets=tickets)
@@ -120,22 +135,32 @@ def extrair_relatorio():
 @app.route('/extrair_relatorio_csv')
 @login_required
 def extrair_relatorio_csv():
-    import csv
-    import io
-    from flask import Response
-    
-    # Cria um cursor para executar a consulta
     cursor = mysql.connection.cursor()
-    cursor.execute("SELECT * FROM TICKET")
+    cursor.execute("""
+        SELECT 
+            T.CD_TICKET_ID, 
+            T.DS_TIPO, 
+            T.NM_USUARIO, 
+            T.CD_MATRICULA, 
+            T.DS_AREA, 
+            T.DS_POSTO, 
+            T.DS_ORIGEM, 
+            T.DS_CLASSIFICACAO, 
+            T.DS_PROBLEMA, 
+            T.NM_RESPONSAVEL, 
+            T.DS_STATUS, 
+            DATE_FORMAT(T.DT_EMISSAO, '%d/%m/%Y') AS DT_EMISSAO
+        FROM TICKET T
+    """)
     tickets = cursor.fetchall()
     cursor.close()
     
-     # Cria um objeto StringIO para armazenar os dados do CSV na memória
+    # Cria um objeto StringIO para armazenar os dados do CSV na memória
     output = io.StringIO()
     writer = csv.writer(output, delimiter=';')
     
     # Escreve o cabeçalho do CSV conforme as colunas da sua tabela HTML
-    writer.writerow(['Chamado', 'Tipo', 'Usuário', 'Matrícula', 'Área', 'Posto', 'Origem', 'Classificação', 'Problema', 'Responsável', 'Status', 'Data de Emissão'])
+    writer.writerow(['Chamado', 'Tipo', 'Usuario', 'Matricula', 'Area', 'Posto', 'Origem', 'Classificacao', 'Problema', 'Responsavel', 'Status', 'Data de Emissao'])
     
     # Escreve os dados das linhas no CSV
     for ticket in tickets:
@@ -148,10 +173,10 @@ def extrair_relatorio_csv():
             ticket[5],  # Posto
             ticket[6],  # Origem
             ticket[7],  # Classificação
-            ticket[10],  # Problema
-            ticket[11],  # Responsável
-            ticket[12], # Status
-            ticket[13]  # Data de Emissão
+            ticket[8],  # Problema
+            ticket[9],  # Responsável
+            ticket[10], # Status
+            ticket[11]  # Data de Emissão
         ]
         writer.writerow(row)
     # Garante que todos os dados foram escritos no buffer
@@ -159,3 +184,16 @@ def extrair_relatorio_csv():
     
     # Cria uma resposta HTTP com o conteúdo do CSV
     return Response(output, mimetype="text/csv", headers={"Content-Disposition": "attachment;filename=tickets.csv"})
+
+@app.route('/abrir_ticket/<int:ticket_id>', methods=['POST'])
+@login_required
+def abrir_ticket(ticket_id):
+    cursor = mysql.connection.cursor()
+    cursor.execute("""
+        UPDATE TICKET
+        SET DS_STATUS = 'ABERTO'
+        WHERE CD_TICKET_ID = %s
+    """, (ticket_id,))
+    mysql.connection.commit()
+    cursor.close()
+    return jsonify({'success': True})
