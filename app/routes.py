@@ -11,6 +11,8 @@ from app.forms.relatorio import Status
 from datetime import datetime
 import csv
 import io
+import unicodedata
+
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
@@ -135,6 +137,8 @@ def extrair_relatorio():
 @app.route('/extrair_relatorio_csv')
 @login_required
 def extrair_relatorio_csv():
+    def remove_acentuacao(texto):
+        return unicodedata.normalize('NFKD', texto).encode('ASCII', 'ignore').decode('ASCII')
     cursor = mysql.connection.cursor()
     cursor.execute("""
         SELECT 

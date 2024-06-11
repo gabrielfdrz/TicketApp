@@ -97,6 +97,10 @@
             </div>
 
             <div class="actions-bottom">
+                {% if ticket[12] != 'ABERTO' and ticket[12] != 'ENCERRADO' %}
+                <button id="openButton" class="open-button" data-id="{{ ticket[0] }}">Abrir</button>
+                {% endif %}
+
                 {% if ticket[12] != 'ENCERRADO' %}
                 <form id="closeTicketForm" method="POST" action="/encerrar_ticket/{{ ticket[0] }}">
                     <button type="submit" class="close-button">Encerrar</button>
@@ -116,8 +120,12 @@
                     xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
                     xhr.onload = function() {
                         if (xhr.status >= 200 && xhr.status < 400) {
-                            // Se a resposta do servidor for bem-sucedida, redireciona para a página de acompanhamento
-                            window.location.href = '/acompanhamento'; // Substitua com o URL da sua página de acompanhamento
+                            // Se a resposta do servidor for bem-sucedida, atualize o status e remova o botão "Encerrar"
+                            var ticketStatusElement = document.getElementById('ticketStatus');
+                            ticketStatusElement.textContent = 'ENCERRADO';
+                            ticketStatusElement.classList.remove('ticket-aberto', 'ticket-em-analise');
+                            ticketStatusElement.classList.add('ticket-encerrado');
+                            document.querySelector('.close-button').remove();
                         } else {
                             // Caso haja um erro na resposta do servidor
                             console.error('Erro ao encerrar o ticket:', xhr.responseText);
@@ -125,9 +133,7 @@
                     };
                     xhr.send(new URLSearchParams(new FormData(form)).toString());
                 });
-            </script>
 
-            <script>
                 document.addEventListener('DOMContentLoaded', function() {
                     var ticketStatusElement = document.getElementById('ticketStatus');
                     var status = ticketStatusElement.textContent.trim().toUpperCase();
@@ -136,13 +142,31 @@
                         ticketStatusElement.classList.add('ticket-aberto');
                     } else if (status === 'ENCERRADO') {
                         ticketStatusElement.classList.add('ticket-encerrado');
-                
-                    }
-
-                    else if (status === 'EM ANÁLISE') {
+                    } else if (status === 'EM ANÁLISE') {
                         ticketStatusElement.classList.add('ticket-em-analise');
-                
                     }
+                });
+
+                document.querySelectorAll('#openButton').forEach(function(button) {
+                    button.addEventListener('click', function() {
+                        var ticketId = this.getAttribute('data-id');
+                        fetch('/abrir_ticket/' + ticketId, {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            }
+                        })
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.success) {
+                                var statusElement = document.getElementById('ticketStatus');
+                                statusElement.textContent = 'ABERTO';
+                                statusElement.classList.remove('ticket-closed');
+                                statusElement.classList.add('ticket-aberto');
+                                this.remove(); // Remove o botão de abrir
+                            }
+                        });
+                    });
                 });
             </script>
         </div>

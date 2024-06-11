@@ -60,7 +60,6 @@
           <p>Assunto: {{ ticket[8] }}</p>
           <div class="ticket-actions">
             {% if ticket[12] == 'EM ANALISE' %}
-            <button class="open-button" data-id="{{ ticket[0] }}">Abrir</button>
             {% endif %}
             <a href="/ticket/{{ ticket[0] }}" class="view-button">Ver Detalhes</a>
             {% if ticket[12] == 'ABERTO' %}
@@ -99,28 +98,7 @@
       });
     });
   
-    document.querySelectorAll('.open-button').forEach(function(button) {
-      button.addEventListener('click', function() {
-        var ticketId = this.getAttribute('data-id');
-        fetch('/abrir_ticket/' + ticketId, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          }
-        })
-        .then(response => response.json())
-        .then(data => {
-          if (data.success) {
-            var statusElement = document.getElementById('status-' + ticketId);
-            statusElement.textContent = 'ABERTO';
-            var ticketElement = document.getElementById('ticket-' + ticketId);
-            ticketElement.classList.remove('ticket-closed');
-            ticketElement.classList.add('ticket-open');
-            button.remove(); // Remove o botão de abrir
-          }
-        });
-      });
-    });
+    
   
     document.getElementById('status-filter').addEventListener('change', function() {
       var status = this.value;
