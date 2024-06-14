@@ -4,13 +4,13 @@ from wtforms.validators import DataRequired
 from datetime import datetime
 
 class TicketForm(FlaskForm):
-    tipo = RadioField('Tipo', choices=[('seguranca', 'Segurança'), ('meio-ambiente', 'Meio Ambiente'), ('energia', 'Energia')], validators=[DataRequired()])
+    tipo = RadioField('Tipo', choices=[('Segurança', 'Segurança'), ('Meio Ambiente', 'Meio Ambiente'), ('Energia', 'Energia')], validators=[DataRequired()])
     usuario = StringField('Nome', validators=[DataRequired()])
-    matricula = StringField('Matrcula', validators=[DataRequired()])
+    matricula = StringField('Matrícula', validators=[DataRequired()])
     area = StringField('Área do Problema', validators=[DataRequired()])
-    posto = SelectField('Posto de Trabalho', choices=[('analista de qualidade', 'Analista de Qualidade'), ('engenheiro de projetos mecanicos', 'Engenheiro de Projetos Mecânicos'), ('gerente de producao', 'Gerente de Produção'), ('operador de maquina', 'Operador de Máquina'), ('rescursos humanos', 'Recursos Humanos'), ('supervisor de linha de producao', 'Supervisor de Linha de Produção'), ('tecnico de manutencao', 'Técnico de Manutenção')], validators=[DataRequired()])
-    origem = SelectField('Origem', choices=[('acidente', 'Acidente'), ('qa', 'QA'), ('esmat', 'ESMAT'), ('cipa', 'CIPA'), ('outros', 'Outros')], validators=[DataRequired()])
-    classificacao = RadioField('Classificação', choices=[('alta', 'Alta'), ('baixa', 'Baixa')], validators=[DataRequired()])
+    posto = SelectField('Posto de Trabalho', choices=[('Conferência', 'Conferência'),('Embalagem', 'Embalagem'),('Faturamento', 'Faturamento'),('Insumos', 'Insumos'),('Inventário', 'Inventário'),('Logistica', 'Logistica'),('Packed', 'Packed'),('Picking', 'Picking'),('Pré Embalagem', 'Pré Embalagem'),('Putaway', 'Putaway'),('Qualidade', 'Qualidade'),('Recebimento', 'Recebimento')], validators=[DataRequired()])
+    origem = SelectField('Origem', choices=[('Acidente', 'Acidente'), ('Qa', 'QA'), ('ESMAT', 'ESMAT'), ('CIPA', 'CIPA'), ('Outros', 'Outros')], validators=[DataRequired()])
+    classificacao = RadioField('Classificação', choices=[('Ato Inseguro', 'Ato Inseguro'), ('Condição Insegura', 'Condição Insegura')], validators=[DataRequired()])
     problema = TextAreaField('Descrição do Problema', validators=[DataRequired()])
     acao = TextAreaField('Ação Imediata')
     solucao = TextAreaField('Solução Proposta')

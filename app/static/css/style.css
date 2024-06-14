@@ -80,14 +80,7 @@ body {
   transition: transform 0.3s; /* Adicionando transição de 0.3 segundos para suavizar a mudança */
 }
 
-.card:hover{
-  transform: scale(1.01); /* Zoom de 50% ao passar o mouse */
-}
-
 /* FORMULÁRIO DE REGISTRO DE INCIDENTES */
-/* FORMULÁRIO DE REGISTRO DE INCIDENTES */
-/* FORMULÁRIO DE REGISTRO DE INCIDENTES */
-
 
 .title {
   font-size: 25px;
@@ -501,25 +494,6 @@ color: #fff;
  
  }
 
- .ticket-aberto span{
- background-color: green;
- border-radius: 5px;
-
-
- }
-
- .ticket-em-analise {
- background-color:  #c9c6c6;
- border-radius: 5px;
-
- }
-
- .ticket-encerrado {
-    background-color: red;
-    border-radius: 5px;
-
- }
-
 .open-button 
 {
   padding: 10px 20px;
@@ -530,4 +504,28 @@ color: #fff;
   font-weight: bold;
   text-decoration: none !important;
 
+}
+
+
+
+/*TICKET ABERTO*/
+
+.ticket-aberto {
+  background-color: green;
+  color: white;
+  border-radius: 5px;
+
+}
+
+.ticket-encerrado {
+  background-color: red;
+  color: white;
+  border-radius: 5px;
+
+}
+
+.ticket-em-analise {
+  background-color: #c9c6c6;
+  color: black;
+  border-radius: 5px;
 }

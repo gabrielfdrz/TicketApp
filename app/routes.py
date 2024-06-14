@@ -116,17 +116,17 @@ def extrair_relatorio():
     cursor = mysql.connection.cursor()
     cursor.execute("""
         SELECT 
-            T.CD_TICKET_ID, 
-            T.DS_TIPO, 
-            T.NM_USUARIO, 
-            T.CD_MATRICULA, 
-            T.DS_AREA, 
-            T.DS_POSTO, 
-            T.DS_ORIGEM, 
-            T.DS_CLASSIFICACAO, 
-            T.DS_PROBLEMA, 
-            T.NM_RESPONSAVEL, 
-            T.DS_STATUS, 
+            T.CD_TICKET_ID,
+            T.DS_TIPO,
+            T.NM_USUARIO,
+            T.CD_MATRICULA,
+            T.DS_AREA,
+            T.DS_POSTO,
+            T.DS_ORIGEM,
+            T.DS_CLASSIFICACAO,
+            T.DS_PROBLEMA,
+            T.NM_RESPONSAVEL,
+            T.DS_STATUS,
             DATE_FORMAT(T.DT_EMISSAO, '%d/%m/%Y') AS DT_EMISSAO
         FROM TICKET T
     """)

@@ -7,13 +7,15 @@
     <link rel="stylesheet" href="../static/css/style.css" />
     <link rel="shortcut icon" href="../static/img/LogoPreto.png" type="image/x-icon">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap">
+    <style>
+    </style>
 </head>
 <body>
     <section class="home">
         <!-- NAVBAR -->
         <header class="navbar">
             <div class="navbar-logo">
-                <img src="../static/img/Logo.png" alt="Logo CNH Industrial" />
+                <a href="/"> <img src="../static/img/Logo.png" alt="Logo CNH Industrial" /> </a>
             </div>
             <nav class="navbar-nav">
                 <ul>
@@ -96,6 +98,11 @@
                 <div class="value">{{ ticket[11] }}</div>
             </div>
 
+            <div class="detail">
+                <div class="label">Data de Emissão:</div>
+                <div class="value">{{ ticket[13] }}</div>
+            </div>
+
             <div class="actions-bottom">
                 {% if ticket[12] != 'ABERTO' and ticket[12] != 'ENCERRADO' %}
                 <button id="openButton" class="open-button" data-id="{{ ticket[0] }}">Abrir</button>
@@ -112,6 +119,20 @@
             </div>
             
             <script>
+
+                document.addEventListener('DOMContentLoaded', function() {
+                    var ticketStatusElement = document.getElementById('ticketStatus');
+                    var status = ticketStatusElement.textContent.trim().toUpperCase();
+                
+                    if (status === 'ABERTO') {
+                        ticketStatusElement.classList.add('ticket-aberto');
+                    }  else if (status === 'EM ANALISE') {
+                        ticketStatusElement.classList.add('ticket-em-analise');
+                    }else if (status === 'ENCERRADO') {
+                        ticketStatusElement.classList.add('ticket-encerrado');
+                    }
+                });
+
                 document.getElementById('closeTicketForm').addEventListener('submit', function(event) {
                     event.preventDefault(); // Previne a submissão padrão do formulário
                     var form = this;
@@ -134,19 +155,6 @@
                     xhr.send(new URLSearchParams(new FormData(form)).toString());
                 });
 
-                document.addEventListener('DOMContentLoaded', function() {
-                    var ticketStatusElement = document.getElementById('ticketStatus');
-                    var status = ticketStatusElement.textContent.trim().toUpperCase();
-                
-                    if (status === 'ABERTO') {
-                        ticketStatusElement.classList.add('ticket-aberto');
-                    } else if (status === 'ENCERRADO') {
-                        ticketStatusElement.classList.add('ticket-encerrado');
-                    } else if (status === 'EM ANÁLISE') {
-                        ticketStatusElement.classList.add('ticket-em-analise');
-                    }
-                });
-
                 document.querySelectorAll('#openButton').forEach(function(button) {
                     button.addEventListener('click', function() {
                         var ticketId = this.getAttribute('data-id');
@@ -161,13 +169,16 @@
                             if (data.success) {
                                 var statusElement = document.getElementById('ticketStatus');
                                 statusElement.textContent = 'ABERTO';
-                                statusElement.classList.remove('ticket-closed');
+                                statusElement.classList.remove('ticket-encerrado', 'ticket-em-analise');
                                 statusElement.classList.add('ticket-aberto');
                                 this.remove(); // Remove o botão de abrir
                             }
                         });
                     });
                 });
+
+
+                
             </script>
         </div>
     </section>

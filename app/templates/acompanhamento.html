@@ -14,7 +14,7 @@
     <!-- NAVBAR -->
     <header class="navbar">
       <div class="navbar-logo">
-        <img src="../static/img/Logo.png" alt="Logo CNH Industrial">
+        <a href="/"> <img src="static/img/Logo.png" alt="Logo CNH Industrial" /> </a>
       </div>
       <nav class="navbar-nav">
         <ul>
@@ -34,7 +34,7 @@
         <select id="status-filter">
           <option value="todos">Todos</option>
           <option value="ABERTO">Aberto</option>
-          <option value="EM_ANALISE">Em Análise</option>
+          <option value="EM ANALISE">Em Análise</option>
           <option value="ENCERRADO">Encerrados</option>
         </select>
       </div>
@@ -106,7 +106,7 @@
       tickets.forEach(function(ticket) {
         if (status === 'todos' || ticket.querySelector('.status').textContent === status) {
           ticket.style.display = 'block';
-        } else if (status === 'EM_ANALISE' && ticket.querySelector('.status').textContent.toUpperCase() === 'EM ANÁLISE') {
+        } else if (status === 'EM ANALISE' && ticket.querySelector('.status').textContent.toUpperCase() === 'EM ANÁLISE') {
           ticket.style.display = 'block';
         } else {
           ticket.style.display = 'none';

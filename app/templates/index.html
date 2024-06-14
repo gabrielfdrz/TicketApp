@@ -7,6 +7,32 @@
     <link rel="stylesheet" href="../static/css/style.css" />
     <link rel="shortcut icon" href="../static/img/LogoPreto.png" type="image/x-icon">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap">
+    <script>
+      // Função para bloquear caracteres não numéricos
+      function validateNumberInput(event) {
+        const char = String.fromCharCode(event.which);
+        if (!(/[0-9]/.test(char))) {
+          event.preventDefault();
+        }
+      }
+
+      // Função para bloquear caracteres não alfabéticos
+      function validateLetterInput(event) {
+        const char = String.fromCharCode(event.which);
+        if (!(/[a-zA-Z\s]/.test(char))) {
+          event.preventDefault();
+        }
+      }
+
+      // Adiciona os eventos de bloqueio ao carregar a página
+      document.addEventListener('DOMContentLoaded', function() {
+        const matriculaInput = document.getElementById('matricula');
+        matriculaInput.addEventListener('keypress', validateNumberInput);
+
+        const nomeInput = document.getElementById('nome');
+        nomeInput.addEventListener('keypress', validateLetterInput);
+      });
+    </script>
   </head>
   <body>
     <section class="home">
@@ -33,12 +59,14 @@
 
           <div class="form-group">
             {{ form.usuario.label }}
-            {{ form.usuario }}
+            <!-- Adicione um id ao campo de nome -->
+            {{ form.usuario(id='nome') }}
           </div>
 
           <div class="form-group">
             {{ form.matricula.label }}
-            {{ form.matricula }}
+            <!-- Adicione um id ao campo de matrícula -->
+            {{ form.matricula(id='matricula') }}
           </div>
 
           <div class="form-group">
