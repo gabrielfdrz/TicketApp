@@ -139,6 +139,7 @@ def extrair_relatorio():
 def extrair_relatorio_csv():
     def remove_acentuacao(texto):
         return unicodedata.normalize('NFKD', texto).encode('ASCII', 'ignore').decode('ASCII')
+
     cursor = mysql.connection.cursor()
     cursor.execute("""
         SELECT 
@@ -170,19 +171,20 @@ def extrair_relatorio_csv():
     for ticket in tickets:
         row = [
             ticket[0],  # Chamado
-            ticket[1],  # Tipo
-            ticket[2],  # Usuário
+            remove_acentuacao(ticket[1]),  # Tipo
+            remove_acentuacao(ticket[2]),  # Usuário
             ticket[3],  # Matrícula
-            ticket[4],  # Área
-            ticket[5],  # Posto
-            ticket[6],  # Origem
-            ticket[7],  # Classificação
-            ticket[8],  # Problema
-            ticket[9],  # Responsável
-            ticket[10], # Status
+            remove_acentuacao(ticket[4]),  # Área
+            remove_acentuacao(ticket[5]),  # Posto
+            remove_acentuacao(ticket[6]),  # Origem
+            remove_acentuacao(ticket[7]),  # Classificação
+            remove_acentuacao(ticket[8]),  # Problema
+            remove_acentuacao(ticket[9]),  # Responsável
+            remove_acentuacao(ticket[10]), # Status
             ticket[11]  # Data de Emissão
         ]
         writer.writerow(row)
+    
     # Garante que todos os dados foram escritos no buffer
     output.seek(0)
     
