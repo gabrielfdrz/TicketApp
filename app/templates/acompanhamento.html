@@ -55,7 +55,7 @@
       <div class="ticket-list">
         {% for ticket in tickets %}
         <div class="ticket {% if ticket[12] == 'ABERTO' %}ticket-open{% elif ticket[12] == 'EM ANALISE' %}ticket-analise{% else %}ticket-closed{% endif %}" id="ticket-{{ ticket[0] }}">
-          <h2>CH-{{ ticket[0] }}</h2>
+          <h2>INC-{{ ticket[0] }}</h2>
           <span class="status" id="status-{{ ticket[0] }}">{{ ticket[12] }}</span>
           <p>Assunto: {{ ticket[8] }}</p>
           <div class="ticket-actions">

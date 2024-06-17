@@ -31,7 +31,7 @@
                 <a href="/acompanhamento" class="back-button">Voltar</a>
             </div>
 
-            <h1 class="title">Detalhes do CH-{{ticket[0] }}</h1>
+            <h1 class="title">Detalhes do INC-{{ ticket[0] }}</h1>
 
             <div id="ticketStatus" class="ticket-details-1">{{ ticket[12] }}</div>
 
@@ -100,7 +100,7 @@
 
             <div class="detail">
                 <div class="label">Data de Emissão:</div>
-                <div class="value">{{ ticket[13] }}</div>
+                <div class="value" id="dataEmissao">{{ ticket[13] }}</div>
             </div>
 
             <div class="actions-bottom">
@@ -119,18 +119,30 @@
             </div>
             
             <script>
-
                 document.addEventListener('DOMContentLoaded', function() {
                     var ticketStatusElement = document.getElementById('ticketStatus');
                     var status = ticketStatusElement.textContent.trim().toUpperCase();
                 
                     if (status === 'ABERTO') {
                         ticketStatusElement.classList.add('ticket-aberto');
-                    }  else if (status === 'EM ANALISE') {
+                    } else if (status === 'EM ANALISE') {
                         ticketStatusElement.classList.add('ticket-em-analise');
-                    }else if (status === 'ENCERRADO') {
+                    } else if (status === 'ENCERRADO') {
                         ticketStatusElement.classList.add('ticket-encerrado');
                     }
+
+                    // Função para formatar a data e hora no formato dd/mm/yyyy HH:MM
+                    function formatarDataHora(dataHora) {
+                        var partesDataHora = dataHora.split(' ');
+                        var partesData = partesDataHora[0].split('-');
+                        var partesHora = partesDataHora[1].split(':');
+                        return partesData[2] + '/' + partesData[1] + '/' + partesData[0] + ' ' + partesHora[0] + ':' + partesHora[1];
+                    }
+
+                    // Formatar a data de emissão
+                    var dataEmissaoElement = document.getElementById('dataEmissao');
+                    var dataEmissao = dataEmissaoElement.textContent.trim();
+                    dataEmissaoElement.textContent = formatarDataHora(dataEmissao);
                 });
 
                 document.getElementById('closeTicketForm').addEventListener('submit', function(event) {
@@ -147,6 +159,7 @@
                             ticketStatusElement.classList.remove('ticket-aberto', 'ticket-em-analise');
                             ticketStatusElement.classList.add('ticket-encerrado');
                             document.querySelector('.close-button').remove();
+                            document.querySelector('.open-button').remove();
                         } else {
                             // Caso haja um erro na resposta do servidor
                             console.error('Erro ao encerrar o ticket:', xhr.responseText);
@@ -176,9 +189,6 @@
                         });
                     });
                 });
-
-
-                
             </script>
         </div>
     </section>
